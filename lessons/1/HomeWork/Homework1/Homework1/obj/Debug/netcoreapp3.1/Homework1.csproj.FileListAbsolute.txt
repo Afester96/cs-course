@@ -1,0 +1,11 @@
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\bin\Debug\netcoreapp3.1\Homework1.exe
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\bin\Debug\netcoreapp3.1\Homework1.deps.json
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\bin\Debug\netcoreapp3.1\Homework1.runtimeconfig.json
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\bin\Debug\netcoreapp3.1\Homework1.runtimeconfig.dev.json
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\bin\Debug\netcoreapp3.1\Homework1.dll
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\bin\Debug\netcoreapp3.1\Homework1.pdb
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\obj\Debug\netcoreapp3.1\Homework1.csprojAssemblyReference.cache
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\obj\Debug\netcoreapp3.1\Homework1.AssemblyInfoInputs.cache
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\obj\Debug\netcoreapp3.1\Homework1.AssemblyInfo.cs
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\obj\Debug\netcoreapp3.1\Homework1.dll
+c:\Users\Afest\Repositories\cs-course\lessons\1\HomeWork\Homework1\Homework1\obj\Debug\netcoreapp3.1\Homework1.pdb
