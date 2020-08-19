@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClassWork2
+namespace ClassWork1
 {
     class Program
     {
