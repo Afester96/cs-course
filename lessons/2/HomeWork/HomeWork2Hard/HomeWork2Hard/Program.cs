@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace HomeWork2Hard
 {
@@ -45,7 +46,10 @@ namespace HomeWork2Hard
             else //operation if user write wrong mathematical operation
             {
                 Console.WriteLine("Plese enter correct mathematical operation (+, -, *, /)");
-            }           
+            }
+
+            //Timer to make it look cooler. Questionable!!!!!!!
+            Thread.Sleep(2000);
 
             //Providing information about the end of program and opportunity to exit
             Console.WriteLine("Thank you for using our program, press any key for exit!");
