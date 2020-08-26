@@ -2,18 +2,36 @@
 
 namespace ClassWork4
 {
+    enum colours
+    {
+        black = 0b1,
+        blue = 0b1 << 1,
+        cyan = 0b1 << 2,
+        grey = 0b1 << 3,
+        green = 0b1 << 4,
+        magenta = 0b1 << 5,
+        red = 0b1 << 6,
+        white = 0b1 << 7,
+        yellow = 0b1 << 8
+    }
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("a");
-            var firstNumber = double.Parse(Console.ReadLine());
-            Console.WriteLine("h");
-            var secondNumber = double.Parse(Console.ReadLine());
-            Console.WriteLine("S side = " + (3 * firstNumber * secondNumber));
-            Console.WriteLine("S full = " + (((3.0 / 2) * firstNumber) * (firstNumber * (Math.Sqrt(3)) + (2 * secondNumber))));
-            Console.WriteLine("V = " + (Math.Pow(firstNumber, 2) / 2.0 * secondNumber * Math.Sqrt(3)));
-            Console.WriteLine("H = " + Math.Sqrt(Math.Pow(secondNumber,2) - Math.Pow(firstNumber,2)/12.0));
+            Console.WriteLine("Вот все значения. выбери какой нравится");
+            var coloursArray = (colours[]) Enum.GetValues(typeof(colours));
+            for (int i = 0; i < coloursArray.Length; i++)
+            {
+                Console.WriteLine(coloursArray[i]);
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                colours colour = (colours) Enum.Parse (typeof(colours), Console.ReadLine());
+                colours  = colour | coloursArray[i];
+                Console.WriteLine();
+            }
+            
+            
         }
     }
 }
