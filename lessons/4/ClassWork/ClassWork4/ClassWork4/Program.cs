@@ -24,7 +24,7 @@ namespace ClassWork4
             colors allColors = colors.zero;
             var colorsGetNames = Enum.GetNames(typeof(colors));
                         
-            for (var i = 0; i < colorsGetNames.Length; i++)
+            for (var i = 0; i < (colorsGetNames.Length - 1); i++)
             {
                 allColors |= (colors)(1 << i);                
             }
