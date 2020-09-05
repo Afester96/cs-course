@@ -44,10 +44,12 @@ namespace HomeWork1
                 catch (FormatException exception)
                 {
                     Console.WriteLine("Ошибка " + exception.Message + "! Попробуйте ещё раз: ");
+                    continue;
                 }
                 catch (OverflowException exception)
                 {
                     Console.WriteLine("Ошибка " + exception.Message + "! Попробуйте ещё раз: ");
+                    continue;
                 }
             }
         }
