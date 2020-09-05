@@ -11,9 +11,9 @@ namespace HomeWork2
             var afterNumber = ReadNumber("Введите желаемую сумму накопления в рублях:");
             int counterDays = 0;
 
-            while (beforeNumber != afterNumber)
+            while (beforeNumber <= afterNumber)
             {
-                beforeNumber = beforeNumber + persentNumber;
+                beforeNumber = beforeNumber * persentNumber + beforeNumber;
                 counterDays++;
             }
             Console.WriteLine("Вам необходимоd " + counterDays + " дней для накопления суммы.");
