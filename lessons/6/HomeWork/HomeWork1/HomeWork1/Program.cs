@@ -7,12 +7,16 @@ namespace HomeWork1
         static void Main(string[] args)
         {
             int enteredNumber = ReadNumber("Введите положительное натуральное число не более 2 миллиардов");
-            var sEnteredNumber = enteredNumber.ToString();
             int evenCounter = 0;
-            for (int i = 0; i < sEnteredNumber.Length; i++)
+            int forEnteredNumber = enteredNumber;
+            for (int i = 0; i < enteredNumber.ToString().Length; i++)
             {
-                if ((int.Parse(sEnteredNumber[i].ToString()) % 2) == 0)
+                int perNumber = forEnteredNumber % 10;
+                forEnteredNumber /= 10;
+                if (perNumber % 2 == 0)
+                {
                     evenCounter++;
+                }
             }
             Console.WriteLine("В числе " + enteredNumber + " содержится " + evenCounter + " чётных чисел.");
             Console.WriteLine("Нажмите любую клавишу для выхода");
