@@ -12,6 +12,13 @@ namespace HomeWork1
             for (int i = 0; i < enteredTextArray.Length ; i++)
                 if (enteredTextArray[i].StartsWith("a"))
                     counter++;
+            //or this
+            //for (int i = 0; i < enteredTextArray.Length; i++)
+            //    if (enteredTextArray[i].StartsWith("a"))
+            //        counter++;
+            //    else if (enteredTextArray[i].StartsWith("A"))
+            //        counter++;
+
             Console.WriteLine(counter);            
         }
         static string TempletString(string text)
