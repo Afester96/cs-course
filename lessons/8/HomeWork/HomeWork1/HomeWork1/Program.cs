@@ -36,16 +36,13 @@ namespace HomeWork1
                 {
                     for (int i = 0; i < entered2.Length; i++) //Проходимся циклом сначала по ключам словаря
                     {
-                        if (dictionary.ContainsKey(entered2[i]) & list.Count > 1) //Если есть совпадение, прыгаем ниже. Если значений остаётся меньше одного, то цикл дальше не идёт
+                        for (int j = 0; j < entered2.Length; j++) //Далее проходимся циклом по значениям словаря
                         {
-                            for (int j = 0; j < entered2.Length; j++) //Далее проходимся циклом по значениям словаря
+                            if (dictionary.ContainsKey(entered2[i]) & dictionary.ContainsValue(entered2[j]) & list.Count > 1) //Если есть совпадение, прыгаем ниже. Если значений остаётся меньше одного, то цикл дальше не идёт
                             {
-                                if (dictionary.ContainsValue(entered2[j]) & dictionary.ContainsKey(entered2[i])) //Перебираем значения словаря по ключу который задали выше
-                                {
-                                    list.Remove(entered2[j]); //Если есть совпадение, удаляем из листа значение которое подошло
-                                }
+                                list.Remove(entered2[j]); //Если есть совпадение, удаляем из листа значение которое подошло
+                                list.Remove(entered2[i]);//Если есть сопадение, удаляем из листа ключ который подошёл
                             }
-                            list.Remove(entered2[i]);//Если есть сопадение, удаляем из листа ключ который подошёл
                         }
                     }
                 }
