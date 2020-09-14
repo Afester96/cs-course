@@ -9,42 +9,29 @@ namespace HomeWork1
             var enteredText = TempletString("Enter string with few words").ToLower();
             var enteredTextArray = enteredText.Split(" ");
             var counter = 0;
-            for (int i = 0; i < enteredTextArray.Length ; i++)
+            for (int i = 0; i < enteredTextArray.Length; i++)
                 if (enteredTextArray[i].StartsWith("a"))
                     counter++;
-            //or this
-            //for (int i = 0; i < enteredTextArray.Length; i++)
-            //    if (enteredTextArray[i].StartsWith("a"))
-            //        counter++;
-            //    else if (enteredTextArray[i].StartsWith("A"))
-            //        counter++;
 
-            Console.WriteLine(counter);            
+            Console.WriteLine(counter);
         }
         static string TempletString(string text)
         {
             while (true)
             {
                 Console.WriteLine(text);
-                try
+
+                var enteredText = Console.ReadLine();
+                if (enteredText.Contains(" "))
+                    return enteredText;
+                else if (String.IsNullOrWhiteSpace(enteredText))
                 {
-                    var enteredText = Console.ReadLine();
-                    if (enteredText.Contains(" "))
-                        return enteredText;
-                    else
-                    {
-                        Console.WriteLine("Please enter few words");
-                        continue;
-                    }
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Error! Please enter correct values.");
+                    Console.WriteLine("Please enter few words");
                     continue;
                 }
-                catch (ArgumentNullException)
+                else
                 {
-                    Console.WriteLine("Error! Please enter correct values.");
+                    Console.WriteLine("Please enter few words");
                     continue;
                 }
             }
