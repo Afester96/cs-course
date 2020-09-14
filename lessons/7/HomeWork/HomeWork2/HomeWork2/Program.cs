@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace HomeWork1
 {
@@ -23,25 +24,38 @@ namespace HomeWork1
                 try
                 {
                     var enteredText = Console.ReadLine();
-                    int myInt;
-                    bool isNumerical = int.TryParse(enteredText, out myInt);
-                    if (string.IsNullOrWhiteSpace(enteredText))
+                    var charArray = enteredText.ToCharArray();
+                    bool result;
+                    int counter = 0;
+                    for (int i = 0; i < charArray.Length; i++)
                     {
-                        Console.WriteLine("Error! You entered empty values.");
-                        continue;
-                    }
-                    else if (string.IsNullOrEmpty(enteredText))
-                    {
-                        Console.WriteLine("Error! You entered empty values.");
-                        continue;
-                    }
-                    else if (isNumerical)
-                    {
-                        Console.WriteLine("Error! You entered numerable values.");
-                        continue;
-                    }
-                    else
-                        return enteredText;    
+                        result = Char.IsDigit(charArray[i]);
+                        if (result == true)
+                        {
+                            Console.WriteLine("Error! You entered numeric values.");
+                            break;
+                        }
+                        else if (result == false)
+                        {
+                            counter++;
+                            continue;
+                        }
+                        else if (result == false & counter == charArray.Length)
+                        {
+                            if (string.IsNullOrWhiteSpace(enteredText))
+                            {
+                                Console.WriteLine("Error! You entered empty values.");
+                                continue;
+                            }
+                            else if (string.IsNullOrEmpty(enteredText))
+                            {
+                                Console.WriteLine("Error! You entered empty values.");
+                                continue;
+                            }
+                            else
+                                return enteredText;
+                        }
+                    }                       
                 }
                 catch (FormatException)
                 {
