@@ -7,50 +7,67 @@ namespace HomeWork1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Please, enter [] or ().");
-            var entered = Console.ReadLine().Trim(); //Вводятся данные, удаляем все пробелы
-            var dictionary = new Dictionary<char, char> //У нас имеется словарь
-            {
-                {'(',')'},
-                {'[',']'}
-            };
+            var entered = EnteredText("Please, enter [] or ().");
             var entered2 = entered.ToCharArray(); //Переводим введённые значения в массив типа чар
-            var list = new List<char>(); //Создаём список
-            for (int i = 0; i < entered2.Length; i++) //Заполняем его значениями
+            var stack = new Stack<char>(); //Создаём список
+            var open = 0; //Открытые скобки счётчик
+            var close = 0; //Закрытые скобки счётчик
+            var counter = 0; //Счётчик значений
+            while (counter < entered2.Length)
             {
-                list.Add(entered2[i]);
-            }
-            while (true)
-            {
-                if (entered2.Length == 1) //Если одно значение, то всегда будет фолс
+                if (entered2[counter] == '(' | entered2[counter] == '[') //Смотрим есть ли открытые
                 {
-                    Console.WriteLine("False");
-                    break;
+                    stack.Push(entered2[counter]); //Если есть, то пушим
+                    counter++; //Добавляем в счётчик
+                    open++; //Добавляем открытую
+                    continue;
                 }
-                else if (list.Count == 0) //Если список пуст, пускаем тру, так как всё взаимоуничтожилось
+                else if (entered2[counter] == ')' | entered2[counter] == ']') //Смотрим есть ли закрытые
                 {
-                    Console.WriteLine("True");
-                    break;
-                }
-                else if (list.Count == entered2.Length) //Если количество в листе равняется количеству введённых данных,
-                {
-                    for (int i = 0; i < entered2.Length; i++) //Проходимся циклом сначала по ключам словаря
+                    if (stack.TryPop(out entered2[counter]) == true) //Если содержат открытые
                     {
-                        for (int j = 0; j < entered2.Length; j++) //Далее проходимся циклом по значениям словаря
-                        {
-                            if (dictionary.ContainsKey(entered2[i]) & dictionary.ContainsValue(entered2[j]) & list.Count > 1) //Если есть совпадение, прыгаем ниже. Если значений остаётся меньше одного, то цикл дальше не идёт
-                            {
-                                list.Remove(entered2[j]); //Если есть совпадение, удаляем из листа значение которое подошло
-                                list.Remove(entered2[i]);//Если есть сопадение, удаляем из листа ключ который подошёл
-                            }
-                        }
+                        counter++;
+                        close++; //Добавляем счётчик закрытых
+                        continue;
+                    }
+                    else if (stack.TryPop(out entered2[counter]) == false) //Если не содержат открытые
+                    {
+                        counter++;
+                        close++;
+                        continue;
                     }
                 }
-                else //Если никакой вариант не подошёл, выводит фолс. Из-за удаления всегда остётся одно значение, которое и вызывает else
+            }
+            if (open == close) //Если совпало значение открытых и закрытых, то выводим тру
+            {
+                Console.WriteLine("True");
+            }
+            else if (open != close) //Если не совпало значение открытых и закрытых, то выводим фолс
+            {
+                Console.WriteLine("False");
+            }
+        }
+        static string EnteredText(string text)
+        {
+            while (true)
+            {
+                Console.WriteLine(text);
+                var enteredText = Console.ReadLine();
+                if (String.IsNullOrWhiteSpace(enteredText))
                 {
-                    Console.WriteLine("False");
-                    break;
+                    Console.WriteLine("Error. You enter Null or white space!");
+                    continue;
                 }
+                else if (enteredText.Contains("(") | enteredText.Contains(")") | enteredText.Contains("[") | enteredText.Contains("]"))
+                {
+                    return enteredText;
+                }
+                else
+                {
+                    Console.WriteLine("Error. You enter wrong value!");
+                    continue;
+                }
+
             }
         }
     }
