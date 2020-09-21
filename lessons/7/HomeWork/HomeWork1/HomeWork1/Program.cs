@@ -22,13 +22,14 @@ namespace HomeWork1
                 Console.WriteLine(text);
 
                 var enteredText = Console.ReadLine();
-                if (enteredText.Contains(" "))
-                    return enteredText;
-                else if (String.IsNullOrWhiteSpace(enteredText))
+                
+                if (String.IsNullOrWhiteSpace(enteredText))
                 {
                     Console.WriteLine("Please enter few words");
                     continue;
                 }
+                else if (enteredText.Contains(" "))
+                    return enteredText;
                 else
                 {
                     Console.WriteLine("Please enter few words");
