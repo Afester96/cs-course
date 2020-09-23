@@ -30,40 +30,20 @@ namespace HomeWork9
             while (true)
             {
                 Console.WriteLine(text);
-
                 var enteredText = Console.ReadLine();
-                var charEnteredText = enteredText.ToCharArray(); //Идёт проверка на то, есть ли число в строке
-                var counter = 0;
-                for (int i = 0; i < charEnteredText.Length; i++)
+                if (String.IsNullOrWhiteSpace(enteredText))
                 {
-                    var torf = Char.IsDigit(charEnteredText[i]);
-                    if (torf == true)
-                    {
-                        break;
-                    }
-                    else if (torf == false)
-                    {
-                        counter++;
-                    }
+                    Console.WriteLine("ERROR. You entered null value");
+                    continue;
                 }
-                if (counter == charEnteredText.Length) //Если не содержит, идёт дальше
+                else if (enteredText.Contains(" "))
                 {
-                    if (String.IsNullOrWhiteSpace(enteredText))
-                    {
-                        Console.WriteLine("ERROR. You entered null value");
-                    }
-                    else if (enteredText.Contains(" "))
-                    {
-                        Console.WriteLine("ERROR. You entered more then one value");
-                    }
-                    else
-                    {
-                        return enteredText;
-                    }
+                    Console.WriteLine("ERROR. You entered more then one value");
+                    continue;
                 }
-                else if (counter != charEnteredText.Length) //Если содержит, выдаёт ошибку
+                else
                 {
-                    Console.WriteLine("ERROR. Entered text contains numbers.");
+                    return enteredText;
                 }
             }
         }
