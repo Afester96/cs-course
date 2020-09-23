@@ -8,41 +8,44 @@ namespace HomeWork1
         static void Main(string[] args)
         {
             var entered = EnteredText("Please, enter [] or ().");
-            var entered2 = entered.ToCharArray(); //Переводим введённые значения в массив типа чар
+            //var entered3 = entered.Split(' ', StringSplitOptions.RemoveEmptyEntries); ;
+            //Console.WriteLine(entered3.Length);
+            var entered2 = entered.ToCharArray();//Переводим введённые значения в массив типа чар
             var stack = new Stack<char>(); //Создаём список
-            var open = 0; //Открытые скобки счётчик
-            var close = 0; //Закрытые скобки счётчик
-            var counter = 0; //Счётчик значений
-            while (counter < entered2.Length)
+            var dictionary = new Dictionary<char, char>
             {
-                if (entered2[counter] == '(' | entered2[counter] == '[') //Смотрим есть ли открытые
+                { '(',')' },
+                {'[',']' },
+                {'{','}' }
+            };
+
+            for (int i = 0; i < entered2.Length; i++)
+            {
+                if (dictionary.ContainsKey(entered2[i])) //Смотрим есть ли открытые
                 {
-                    stack.Push(entered2[counter]); //Если есть, то пушим
-                    counter++; //Добавляем в счётчик
-                    open++; //Добавляем открытую
+                    stack.Push(entered2[i]); //Если есть, то пушим
                     continue;
                 }
-                else if (entered2[counter] == ')' | entered2[counter] == ']') //Смотрим есть ли закрытые
+                else if (dictionary.ContainsValue(entered2[i])) //Смотрим есть ли закрытые
                 {
-                    if (stack.TryPop(out entered2[counter]) == true) //Если содержат открытые
+                    try
                     {
-                        counter++;
-                        close++; //Добавляем счётчик закрытых
+                        stack.Pop();
                         continue;
                     }
-                    else if (stack.TryPop(out entered2[counter]) == false) //Если не содержат открытые
+                    catch (InvalidOperationException)
                     {
-                        counter++;
-                        close++;
-                        continue;
+                        Console.WriteLine("False");
+                        stack.Push(entered2[i]);
+                        break;
                     }
                 }
             }
-            if (open == close) //Если совпало значение открытых и закрытых, то выводим тру
+            if (stack.Count == 0) 
             {
                 Console.WriteLine("True");
             }
-            else if (open != close) //Если не совпало значение открытых и закрытых, то выводим фолс
+            else  
             {
                 Console.WriteLine("False");
             }
@@ -52,22 +55,17 @@ namespace HomeWork1
             while (true)
             {
                 Console.WriteLine(text);
+                
                 var enteredText = Console.ReadLine();
                 if (String.IsNullOrWhiteSpace(enteredText))
                 {
                     Console.WriteLine("Error. You enter Null or white space!");
                     continue;
                 }
-                else if (enteredText.Contains("(") | enteredText.Contains(")") | enteredText.Contains("[") | enteredText.Contains("]"))
+                else
                 {
                     return enteredText;
                 }
-                else
-                {
-                    Console.WriteLine("Error. You enter wrong value!");
-                    continue;
-                }
-
             }
         }
     }
