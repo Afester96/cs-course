@@ -30,17 +30,12 @@ namespace HomeWork1
                     for (int i = 0; i < charArray.Length; i++)
                     {
                         result = Char.IsDigit(charArray[i]);
-                        if (result == true)
+                        if (result)
                         {
                             Console.WriteLine("Error! You entered numeric values.");
                             break;
                         }
-                        else if (result == false)
-                        {
-                            counter++;
-                            continue;
-                        }
-                        else if (result == false & counter == charArray.Length)
+                        else if (!result & counter == charArray.Length)
                         {
                             if (string.IsNullOrWhiteSpace(enteredText))
                             {
@@ -55,7 +50,12 @@ namespace HomeWork1
                             else
                                 return enteredText;
                         }
-                    }                       
+                        else
+                        {
+                            counter++;
+                            continue;
+                        }
+                    }
                 }
                 catch (FormatException)
                 {
