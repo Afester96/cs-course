@@ -43,7 +43,23 @@ namespace HomeWork9
                 }
                 else
                 {
-                    return enteredText;
+                    foreach (char i in enteredText)
+                    {
+                        var torf = Char.IsDigit(i);
+                        if (torf)
+                        {
+                            Console.WriteLine("ERROR. You entered text with number");
+                            break;
+                        }
+                        else if(!torf && !enteredText.EndsWith(i))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            return enteredText;
+                        }
+                    }
                 }
             }
         }
