@@ -8,9 +8,6 @@ namespace HomeWork1
         static void Main(string[] args)
         {
             var entered = EnteredText("Please, enter [] or ().");
-            //var entered3 = entered.Split(' ', StringSplitOptions.RemoveEmptyEntries); ;
-            //Console.WriteLine(entered3.Length);
-            var entered2 = entered.ToCharArray();//Переводим введённые значения в массив типа чар
             var stack = new Stack<char>(); //Создаём список
             var dictionary = new Dictionary<char, char>
             {
@@ -18,15 +15,14 @@ namespace HomeWork1
                 {'[',']' },
                 {'{','}' }
             };
-
-            for (int i = 0; i < entered2.Length; i++)
+            foreach (char i in entered)
             {
-                if (dictionary.ContainsKey(entered2[i])) //Смотрим есть ли открытые
+                if (dictionary.ContainsKey(i)) //Смотрим есть ли открытые
                 {
-                    stack.Push(entered2[i]); //Если есть, то пушим
+                    stack.Push(i); //Если есть, то пушим
                     continue;
                 }
-                else if (dictionary.ContainsValue(entered2[i])) //Смотрим есть ли закрытые
+                else if (dictionary.ContainsValue(i)) //Смотрим есть ли закрытые
                 {
                     try
                     {
@@ -35,8 +31,7 @@ namespace HomeWork1
                     }
                     catch (InvalidOperationException)
                     {
-                        Console.WriteLine("False");
-                        stack.Push(entered2[i]);
+                        stack.Push(i);
                         break;
                     }
                 }
