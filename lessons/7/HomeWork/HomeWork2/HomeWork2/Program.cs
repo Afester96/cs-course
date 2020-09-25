@@ -21,52 +21,14 @@ namespace HomeWork1
             while (true)
             {
                 Console.WriteLine(text);
-                try
+
+                var enteredText = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(enteredText))
                 {
-                    var enteredText = Console.ReadLine();
-                    var charArray = enteredText.ToCharArray();
-                    bool result;
-                    int counter = 0;
-                    for (int i = 0; i < charArray.Length; i++)
-                    {
-                        result = Char.IsDigit(charArray[i]);
-                        if (result)
-                        {
-                            Console.WriteLine("Error! You entered numeric values.");
-                            break;
-                        }
-                        else if (!result & counter == charArray.Length)
-                        {
-                            if (string.IsNullOrWhiteSpace(enteredText))
-                            {
-                                Console.WriteLine("Error! You entered empty values.");
-                                continue;
-                            }
-                            else if (string.IsNullOrEmpty(enteredText))
-                            {
-                                Console.WriteLine("Error! You entered empty values.");
-                                continue;
-                            }
-                            else
-                                return enteredText;
-                        }
-                        else
-                        {
-                            counter++;
-                            continue;
-                        }
-                    }
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Error! Please enter correct values.");
+                    Console.WriteLine("Error! You entered empty values.");
                     continue;
                 }
-                catch (ArgumentNullException)
-                {
-                    Console.WriteLine("Error! Please enter correct values.");
-                    continue;
-                }
+                return enteredText;
             }
         }
     }
