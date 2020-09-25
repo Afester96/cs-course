@@ -8,39 +8,11 @@ namespace HomeWork1
         static void Main(string[] args)
         {
             var entered = EnteredText("Please, enter [] or ().");
-            var stack = new Stack<char>(); //Создаём список
-            var dictionary = new Dictionary<char, char>
-            {
-                { '(',')' },
-                {'[',']' },
-                {'{','}' }
-            };
-            foreach (char i in entered)
-            {
-                if (dictionary.ContainsKey(i)) //Смотрим есть ли открытые
-                {
-                    stack.Push(i); //Если есть, то пушим
-                    continue;
-                }
-                else if (dictionary.ContainsValue(i)) //Смотрим есть ли закрытые
-                {
-                    try
-                    {
-                        stack.Pop();
-                        continue;
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        stack.Push(i);
-                        break;
-                    }
-                }
-            }
-            if (stack.Count == 0) 
+            if (IsBool(entered))
             {
                 Console.WriteLine("True");
             }
-            else  
+            else
             {
                 Console.WriteLine("False");
             }
@@ -50,7 +22,6 @@ namespace HomeWork1
             while (true)
             {
                 Console.WriteLine(text);
-                
                 var enteredText = Console.ReadLine();
                 if (String.IsNullOrWhiteSpace(enteredText))
                 {
@@ -61,6 +32,42 @@ namespace HomeWork1
                 {
                     return enteredText;
                 }
+            }
+        }
+        static bool IsBool(string test)
+        {
+            var dictionary = new Dictionary<char, char>
+            {
+                { '(',')' },
+                {'[',']' },
+                {'{','}' }
+            };
+            var stack = new Stack<char>(); //Создаём список
+            foreach (char i in test)
+            {
+                if (dictionary.ContainsKey(i)) //Смотрим есть ли открытые
+                {
+                    stack.Push(i); //Если есть, то пушим
+                }
+                else if (dictionary.ContainsValue(i)) //Смотрим есть ли закрытые
+                {
+                    try
+                    {
+                        stack.Pop();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (stack.Count == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
