@@ -12,9 +12,9 @@ namespace HomeWork9
             get { return _name; }
             set
             {
-                if (value == null)
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new Exception("Name must been not null");
+                    throw new ArgumentException("Name must been not null");
                 }
                 else
                 {
@@ -30,7 +30,7 @@ namespace HomeWork9
             {
                 if (value < 0)
                 {
-                    throw new Exception("Age must been more than 0");
+                    throw new ArgumentException("Age must been more than 0");
                 }
                 else
                 {

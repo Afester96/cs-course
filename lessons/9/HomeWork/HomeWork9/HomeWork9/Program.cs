@@ -34,12 +34,10 @@ namespace HomeWork9
                 if (String.IsNullOrWhiteSpace(enteredText))
                 {
                     Console.WriteLine("ERROR. You entered null value");
-                    continue;
                 }
                 else if (enteredText.Contains(" "))
                 {
                     Console.WriteLine("ERROR. You entered more then one value");
-                    continue;
                 }
                 else
                 {
