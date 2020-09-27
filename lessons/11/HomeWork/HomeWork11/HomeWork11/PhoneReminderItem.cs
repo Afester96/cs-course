@@ -12,8 +12,7 @@ namespace HomeWork11
             PhoneNumber = phoneNumber;
         }
         public override string Description =>
-            $"{GetType()}\nAlarm Date: {AlarmDate}, Alarm Message: {AlarmMessage}, \nTime To Alarm: {TimeToAlarm}, " +
-                $"Is Outdated: {IsOutdated}, PhoneNumber: {PhoneNumber}";
+            $"{base.Description}, PhoneNumber: {PhoneNumber}";
         //public override void WritePriperties() =>
         //    Console.WriteLine($"Alarm Date: {AlarmDate}, Alarm Message: {AlarmMessage}, Time To Alarm: {TimeToAlarm}, " +
         //        $"Is Outdated: {IsOutdated}, PhoneNumber: {PhoneNumber}");

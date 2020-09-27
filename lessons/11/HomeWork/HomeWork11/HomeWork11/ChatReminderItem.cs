@@ -14,8 +14,7 @@ namespace HomeWork11
             AccountName = accountName;
         }
         public override string Description =>
-            $"{GetType()}\nAlarm Date: {AlarmDate}, Alarm Message: {AlarmMessage}, \nTime To Alarm: {TimeToAlarm}," +
-                $" Is Outdated: {IsOutdated}, \nChat Name: {ChatName}, Account Name: {AccountName}";
+            $"{base.Description}, \nChat Name: {ChatName}, Account Name: {AccountName}";
         //public override void WritePriperties() => 
         //    Console.WriteLine($"Alarm Date: {AlarmDate}, Alarm Message: {AlarmMessage}, Time To Alarm: {TimeToAlarm}," +
         //        $" Is Outdated: {IsOutdated}, Chat Name: {ChatName}, Account Name: {AccountName}");
