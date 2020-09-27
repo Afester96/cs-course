@@ -26,7 +26,6 @@ namespace HomeWork1
                 if (String.IsNullOrWhiteSpace(enteredText))
                 {
                     Console.WriteLine("Error. You enter Null or white space!");
-                    continue;
                 }
                 else
                 {
