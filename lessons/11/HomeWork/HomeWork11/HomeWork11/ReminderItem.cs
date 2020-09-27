@@ -12,17 +12,7 @@ namespace HomeWork11
         public TimeSpan TimeToAlarm => DateTimeOffset.Now - AlarmDate;
         public bool IsOutdated
         {
-            get
-            {
-                if (TimeToAlarm >= new TimeSpan(0))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+            get => TimeToAlarm >= default(TimeSpan);
         }
     }
 }
