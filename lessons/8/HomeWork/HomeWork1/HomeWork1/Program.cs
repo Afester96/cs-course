@@ -61,14 +61,7 @@ namespace HomeWork1
                     }
                 }
             }
-            if (stack.Count == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return stack.Count == 0;
         }
     }
 }
