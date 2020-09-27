@@ -11,9 +11,12 @@ namespace HomeWork11
             AlarmDate = alarmDate;
             AlarmMessage = alarmMessage;
         }
-        public void WritePriperties()
+        public virtual string Description =>
+            $"{GetType()}\nAlarm Date: {AlarmDate}, Alarm Message: {AlarmMessage}, \nTime To Alarm: {TimeToAlarm}, Is Outdated: {IsOutdated}";
+
+        public virtual void WritePriperties()
         {
-            Console.WriteLine($"Alarm Date: {AlarmDate}, Alarm Message: {AlarmMessage}, Time To Alarm: {TimeToAlarm}, Is Outdated: {IsOutdated}");
+            Console.WriteLine(Description);
         }
     }
 }

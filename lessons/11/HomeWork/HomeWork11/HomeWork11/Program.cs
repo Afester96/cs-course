@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HomeWork11
 {
@@ -6,10 +7,15 @@ namespace HomeWork11
     {
         static void Main(string[] args)
         {
-            var reminderItem1 = new ReminderItem(DateTimeOffset.Parse("10:00"), "Testing");
-            var reminderItem2 = new ReminderItem(alarmDate: DateTimeOffset.Parse("12:00"), alarmMessage: "Testing2");
-            reminderItem1.WritePriperties();
-            reminderItem2.WritePriperties();
+            var list = new List<ReminderItem>();
+            list.Add(new ReminderItem(DateTimeOffset.Parse("10:00"), "Testing"));
+            list.Add(new PhoneReminderItem(DateTimeOffset.Parse("10:00"), "Testing", "88005553535"));
+            list.Add(new ChatReminderItem(DateTimeOffset.Parse("10:00"), "Testing", "Chattest", "Afester"));
+
+            foreach (var item in list)
+            {
+                item.WritePriperties();
+            }
         }
     }
 }
