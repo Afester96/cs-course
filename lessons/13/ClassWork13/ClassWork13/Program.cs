@@ -48,22 +48,22 @@ namespace ClassWork13
     {
         public override void LogInfo(string message)
         {
-            File.WriteAllText(@"c:\Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
+            File.WriteAllText(@"Test.txt", $"{DateTimeOffset.Now} {message.GetType()} {message}");
         }
         public override void LogWarning(string message)
         {
-            File.WriteAllText(@"c:\Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
+            File.WriteAllText(@"Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
         }
         public override void LogError(string message)
         {
-            File.WriteAllText(@"c:\Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
+            File.WriteAllText(@"Test.txtt", $"{DateTimeOffset.Now} {GetType()} {message}");
         }
     }
     public class ConsoleLogWriter : AbstractLogWriter
     {
         public override void LogInfo(string message)
         {
-            Console.WriteLine($"{DateTimeOffset.Now} {GetType()} {message}");
+            Console.WriteLine($"{DateTimeOffset.Now} {message.GetType()} {message}");
         }
         public override void LogWarning(string message)
         {
@@ -79,17 +79,17 @@ namespace ClassWork13
         public override void LogInfo(string message)
         {
             Console.WriteLine($"{DateTimeOffset.Now} {GetType()} {message}");
-            File.WriteAllText(@"c:\Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
+            File.WriteAllText(@"Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
         }
         public override void LogWarning(string message)
         {
             Console.WriteLine($"{DateTimeOffset.Now} {GetType()} {message}");
-            File.WriteAllText(@"c:\Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
+            File.WriteAllText(@"Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
         }
         public override void LogError(string message)
         {
             Console.WriteLine($"{DateTimeOffset.Now} {GetType()} {message}");
-            File.WriteAllText(@"c:\Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
+            File.WriteAllText(@"Test.txt", $"{DateTimeOffset.Now} {GetType()} {message}");
         }
     }
 
