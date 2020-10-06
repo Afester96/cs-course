@@ -45,16 +45,17 @@ namespace HomeWork14
     //        return GetEnumerator();
     //    }
     //}
-    public class Test2 : IEnumerable
+    public class Test2 : IEnumerable<int>
     {
         private readonly int _numbers;
-        public Test2(int numbers)
-        {
-            _numbers = numbers;
-        }
         private int _first;
         private int _second;
         private int _count;
+        public Test2(int numbers)
+        {
+            _numbers = numbers;
+            Reset();
+        }        
         public bool MoveNext()
         {
             return ++_count <= _numbers;
@@ -63,8 +64,6 @@ namespace HomeWork14
         {
             get
             {
-                _first = 0;
-                _second = 1;
                 var firstTry = _first;
                 _first = _second;
                 _second = firstTry + _second;
@@ -75,10 +74,13 @@ namespace HomeWork14
         public void Reset()
         {
             _count = 0;
+            _first = 0;
+            _second = 1;
         }
-        public IEnumerator GetEnumerator()
+        
+        public IEnumerator<int> GetEnumerator()
         {
-            return new Test2(_numbers);
+            return new Test2(this);
         }
         
         IEnumerator IEnumerable.GetEnumerator()
