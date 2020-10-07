@@ -12,9 +12,9 @@ namespace ClassWork13
                 var test1 = new FileLogWriter();
                 var test2 = new ConsoleLogWriter();
                 var test = new MultipleLogWriter(test1, test2);
-                test.LogError("test", Type.Error);
-                test.LogInfo("test2", Type.Info);
-                test.LogWarning("test3", Type.Warning);
+                test.LogError("test");
+                test.LogInfo("test2");
+                test.LogWarning("test3");
             }
         }
     }
@@ -26,40 +26,69 @@ namespace ClassWork13
     }
     public interface ILogWriter
     {
-        void LogInfo(string message, Type type);
-        void LogWarning(string message, Type type);
-        void LogError(string message, Type type);
+        void LogInfo(string message);
+        void LogWarning(string message);
+        void LogError(string message);
     }
-   
-    public class FileLogWriter : ILogWriter
+    public abstract class AbstractLogWriter : ILogWriter
     {
-        public void LogInfo(string message, Type type)
+        protected abstract void Write(string message, Type logType);
+        public void LogError(string message)
         {
-            File.WriteAllText(@$"{message}.txt", $"{DateTimeOffset.Now} {type} {message}");
+            Write(message, Type.Error);
         }
-        public void LogWarning(string message, Type type)
+
+        public void LogInfo(string message)
         {
-            File.WriteAllText(@$"{message}.txt", $"{DateTimeOffset.Now} {type} {message}");
+            Write(message, Type.Info);
         }
-        public void LogError(string message, Type type)
+
+        public void LogWarning(string message)
         {
-            File.WriteAllText(@$"{message}.txt", $"{DateTimeOffset.Now} {type} {message}");
+            Write(message, Type.Warning);
+        }
+
+        protected string Message(string message, Type logType)
+        {
+            return $"{DateTimeOffset.Now} {logType} {message}";
         }
     }
-    public class ConsoleLogWriter : ILogWriter
+    public class FileLogWriter : AbstractLogWriter
     {
-        
-        public void LogInfo(string message, Type type)
+        protected override void Write(string message, Type logType)
         {
-            Console.WriteLine($"{DateTimeOffset.Now} {type} {message}");
+            var text = Message(message, logType);
+            switch (logType)
+            {
+                case Type.Info:
+                    Console.WriteLine(text);
+                    break;
+                case Type.Warning:
+                    Console.WriteLine(text);
+                    break;
+                case Type.Error:
+                    Console.WriteLine(text);
+                    break;
+            }
         }
-        public void LogWarning(string message, Type type)
+    }
+    public class ConsoleLogWriter : AbstractLogWriter
+    {
+        protected override void Write(string message, Type logType)
         {
-            Console.WriteLine($"{DateTimeOffset.Now} {type} {message}");
-        }
-        public void LogError(string message, Type type)
-        {
-            Console.WriteLine($"{DateTimeOffset.Now} {type} {message}");
+            var text = Message(message, logType);
+            switch (logType)
+            {
+                case Type.Info:
+                    File.WriteAllText($"{message}.txt", text);
+                    break;
+                case Type.Warning:
+                    File.WriteAllText($"{message}.txt", text);
+                    break;
+                case Type.Error:
+                    File.WriteAllText($"{message}.txt", text);
+                    break;
+            }
         }
     }
     public class MultipleLogWriter : ILogWriter
@@ -69,25 +98,25 @@ namespace ClassWork13
         {
             LogWriters = logWriters;
         }
-        public void LogInfo(string message, Type type)
+        public void LogInfo(string message)
         {
             foreach (var log in LogWriters)
             {
-                log.LogInfo(message, type);
+                log.LogInfo(message);
             }
         }
-        public void LogWarning(string message, Type type)
+        public void LogWarning(string message)
         {
             foreach (var log in LogWriters)
             {
-                log.LogInfo(message, type);
+                log.LogInfo(message);
             }
         }
-        public void LogError(string message, Type type)
+        public void LogError(string message)
         {
             foreach (var log in LogWriters)
             {
-                log.LogInfo(message, type);
+                log.LogInfo(message);
             }
         }
     }
