@@ -13,7 +13,7 @@ namespace ClassWork13
                 var test1 = new FileLogWriter();
                 var test2 = new ConsoleLogWriter();
                 var test = new MultipleLogWriter(test1, test2);
-                test.Multiple("test");
+                test.Multiple("test", Type.Info);
             }
             //var test = new ConsoleLogWriter();
             //test.LogInfo("test");
@@ -35,7 +35,7 @@ namespace ClassWork13
             //}
         }
     }
-    enum Type
+    public enum Type
     {
         Info,
         Warning,
@@ -85,13 +85,36 @@ namespace ClassWork13
         {
             LogWriters = logWriters;
         }
-        public void Multiple(string message)
+        public void Multiple(string message, Type type)
         {
-            foreach (var log in LogWriters)
+            switch (type)
             {
-                log.LogInfo(message);
-                log.LogError(message);
-                log.LogWarning(message);
+                case Type.Info:
+                    foreach (var log in LogWriters)
+                    {
+                        log.LogInfo(message);
+                        log.LogError(message);
+                        log.LogWarning(message);
+                    }
+                    break;
+                case Type.Warning:
+                    foreach (var log in LogWriters)
+                    {
+                        log.LogInfo(message);
+                        log.LogError(message);
+                        log.LogWarning(message);
+                    }
+                    break;
+                case Type.Error:
+                    foreach (var log in LogWriters)
+                    {
+                        log.LogInfo(message);
+                        log.LogError(message);
+                        log.LogWarning(message);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }
