@@ -53,42 +53,20 @@ namespace ClassWork13
             return $"{DateTimeOffset.Now} {logType} {message}";
         }
     }
-    public class FileLogWriter : AbstractLogWriter
-    {
-        protected override void Write(string message, Type logType)
-        {
-            var text = Message(message, logType);
-            switch (logType)
-            {
-                case Type.Info:
-                    Console.WriteLine(text);
-                    break;
-                case Type.Warning:
-                    Console.WriteLine(text);
-                    break;
-                case Type.Error:
-                    Console.WriteLine(text);
-                    break;
-            }
-        }
-    }
     public class ConsoleLogWriter : AbstractLogWriter
     {
         protected override void Write(string message, Type logType)
         {
             var text = Message(message, logType);
-            switch (logType)
-            {
-                case Type.Info:
-                    File.WriteAllText($"{message}.txt", text);
-                    break;
-                case Type.Warning:
-                    File.WriteAllText($"{message}.txt", text);
-                    break;
-                case Type.Error:
-                    File.WriteAllText($"{message}.txt", text);
-                    break;
-            }
+            Console.WriteLine(text);
+        }
+    }
+    public class FileLogWriter : AbstractLogWriter
+    {
+        protected override void Write(string message, Type logType)
+        {
+            var text = Message(message, logType);
+            File.WriteAllText($"{logType}.txt", text);
         }
     }
     public class MultipleLogWriter : ILogWriter
