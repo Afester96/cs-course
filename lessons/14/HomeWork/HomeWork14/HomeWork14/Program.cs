@@ -6,8 +6,8 @@ namespace HomeWork14
     {
         static void Main(string[] args)
         {
-            var test = new Test(20);
-            var test2 = new Test2(10);
+            var test = new FibonacciYield(20);
+            var test2 = new Fibonacci(10);
 
             foreach (var i in test)
             {

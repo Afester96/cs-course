@@ -2,10 +2,10 @@
 
 namespace HomeWork14
 {
-    public class Test : IEnumerable
+    public class FibonacciYield : IEnumerable
     {
         private readonly int _numbers;
-        public Test(int numbers)
+        public FibonacciYield(int numbers)
         {
             _numbers = numbers;
         }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace HomeWork14
 {
-    public class Test2 : IEnumerable<int>
+    public class Fibonacci : IEnumerable<int>
     {
         private readonly int _numbers;
         
-        public Test2(int numbers)
+        public Fibonacci(int numbers)
         {
             _numbers = numbers;
         }
