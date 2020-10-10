@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace ClassWork13
+﻿namespace ClassWork13
 {
     class Program
     {
@@ -9,97 +6,21 @@ namespace ClassWork13
         {
             while (true)
             {
-                var test1 = new FileLogWriter();
-                var test2 = new ConsoleLogWriter();
-                var test = new MultipleLogWriter(test1, test2);
-                test.LogError("test");
-                test.LogInfo("test2");
-                test.LogWarning("test3");
-            }
-        }
-    }
-    public enum Type
-    {
-        Info,
-        Warning,
-        Error
-    }
-    public interface ILogWriter
-    {
-        void LogInfo(string message);
-        void LogWarning(string message);
-        void LogError(string message);
-    }
-    public abstract class AbstractLogWriter : ILogWriter
-    {
-        protected abstract void Write(string message, Type logType);
-        public void LogError(string message)
-        {
-            Write(message, Type.Error);
-        }
+                var consoleLogWriter = LogWriterFactory.Instance.GetLogWriter<ConsoleLogWriter>(null);
+                var fileLogWriter = LogWriterFactory.Instance.GetLogWriter<FileLogWriter>("something.txt");
+                var multipleLogWriter = LogWriterFactory.Instance.GetLogWriter<MultipleLogWriter>(new ILogWriter[] { consoleLogWriter, fileLogWriter });
 
-        public void LogInfo(string message)
-        {
-            Write(message, Type.Info);
-        }
+                consoleLogWriter.LogError("Console Error");
+                consoleLogWriter.LogInfo("Console Info");
+                consoleLogWriter.LogWarning("Console Warning!");
 
-        public void LogWarning(string message)
-        {
-            Write(message, Type.Warning);
-        }
+                fileLogWriter.LogError("File Error");
+                fileLogWriter.LogInfo("File Info");
+                fileLogWriter.LogWarning("File Warning!");
 
-        protected string Message(string message, Type logType)
-        {
-            return $"{DateTimeOffset.Now} {logType} {message}";
-        }
-    }
-    public class ConsoleLogWriter : AbstractLogWriter
-    {
-        protected override void Write(string message, Type logType)
-        {
-            var text = Message(message, logType);
-            Console.WriteLine(text);
-        }
-    }
-    public class FileLogWriter : AbstractLogWriter
-    {
-        private readonly string _fileName;
-        public FileLogWriter(string path = "something.txt")
-        {
-            _fileName = path;
-        }
-        protected override void Write(string message, Type logType)
-        {
-            var text = Message(message, logType);
-            File.WriteAllText(_fileName, text);
-        }
-    }
-    public class MultipleLogWriter : ILogWriter
-    {
-        public ILogWriter[] LogWriters { get; private set; }
-        public MultipleLogWriter(params ILogWriter[] logWriters)
-        {
-            LogWriters = logWriters;
-        }
-        public void LogInfo(string message)
-        {
-            foreach (var log in LogWriters)
-            {
-                log.LogInfo(message);
-            }
-        }
-        public void LogWarning(string message)
-        {
-            foreach (var log in LogWriters)
-            {
-                log.LogInfo(message);
-            }
-        }
-        public void LogError(string message)
-        {
-            foreach (var log in LogWriters)
-            {
-                log.LogInfo(message);
+                multipleLogWriter.LogError("Multiple Error");
+                multipleLogWriter.LogInfo("Multiple Info");
+                multipleLogWriter.LogWarning("Multiple Warning");
             }
         }
     }
