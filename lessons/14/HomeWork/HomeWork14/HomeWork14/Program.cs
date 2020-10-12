@@ -6,14 +6,14 @@ namespace HomeWork14
     {
         static void Main(string[] args)
         {
-            var test = new FibonacciYield(20);
-            var test2 = new Fibonacci(10);
+            var fibonacciYield = new FibonacciYield(20);
+            var fibonacci = new Fibonacci(10);
 
-            foreach (var i in test)
+            foreach (var i in fibonacciYield)
             {
                 Console.WriteLine(i);
             }
-            foreach (var i in test2)
+            foreach (var i in fibonacci)
             {
                 Console.WriteLine(i);
             }

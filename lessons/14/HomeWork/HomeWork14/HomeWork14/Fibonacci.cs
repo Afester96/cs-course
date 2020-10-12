@@ -14,7 +14,7 @@ namespace HomeWork14
 
         public IEnumerator<int> GetEnumerator()
         {
-            return new Test2Enumerator(_numbers);
+            return new FibonacciEnumerator(_numbers);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -22,13 +22,13 @@ namespace HomeWork14
             return GetEnumerator();
         }
     }
-    class Test2Enumerator : IEnumerator<int>
+    class FibonacciEnumerator : IEnumerator<int>
     {
         private readonly int _numbers;
         private int _first;
         private int _second;
         private int _count;
-        public Test2Enumerator(int numbers)
+        public FibonacciEnumerator(int numbers)
         {
             _numbers = numbers;
             Reset();
