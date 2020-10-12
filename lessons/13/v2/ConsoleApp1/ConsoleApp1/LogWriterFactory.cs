@@ -20,18 +20,12 @@ namespace ClassWork13
 
             else if (typeof(T) == typeof(FileLogWriter))
             {
-                return parameters is string path
-                    ? new FileLogWriter(path)
-                    : parameters == null
-                        ? new FileLogWriter()
-                        : throw new ArgumentException($"Parameter {nameof(parameters)} must be {typeof(string)}");
+                return new FileLogWriter(parameters as string);
             }
 
             else if (typeof(T) == typeof(MultipleLogWriter))
             {
-                return parameters is ILogWriter[] logWriters
-                    ? new MultipleLogWriter(logWriters)
-                    : throw new ArgumentException($"Parameter {nameof(parameters)} must be{typeof(ILogWriter[])}");
+                return new MultipleLogWriter(parameters as ILogWriter[]);
             }
 
             throw new NotSupportedException($"\"{typeof(T)}\" is not correct");
