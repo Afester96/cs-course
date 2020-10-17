@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.Storage", "Reminder.Storage\Reminder.Storage.csproj", "{DF289C49-B6D7-4B4E-8D1F-0171354E8C8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.Storage.Memory", "Reminder.Storage.Memory\Reminder.Storage.Memory.csproj", "{31FCB5CC-4E28-42B2-A9B4-5CCF883D0B16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.Storage.Memory.Tests", "Reminder.Storage.Memory.Tests\Reminder.Storage.Memory.Tests.csproj", "{F83235F3-470A-4BBA-A5D0-7B31F923D60C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF289C49-B6D7-4B4E-8D1F-0171354E8C8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF289C49-B6D7-4B4E-8D1F-0171354E8C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF289C49-B6D7-4B4E-8D1F-0171354E8C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF289C49-B6D7-4B4E-8D1F-0171354E8C8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31FCB5CC-4E28-42B2-A9B4-5CCF883D0B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31FCB5CC-4E28-42B2-A9B4-5CCF883D0B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31FCB5CC-4E28-42B2-A9B4-5CCF883D0B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31FCB5CC-4E28-42B2-A9B4-5CCF883D0B16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F83235F3-470A-4BBA-A5D0-7B31F923D60C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F83235F3-470A-4BBA-A5D0-7B31F923D60C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F83235F3-470A-4BBA-A5D0-7B31F923D60C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F83235F3-470A-4BBA-A5D0-7B31F923D60C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
