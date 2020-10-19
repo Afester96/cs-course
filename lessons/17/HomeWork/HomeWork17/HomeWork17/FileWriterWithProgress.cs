@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace HomeWork17
 {
@@ -9,17 +10,27 @@ namespace HomeWork17
 
         public void WriteBytes(string fileName, byte[] data, float percentageToFireEvent)
         {
-            var random = new Random();
-
+            var dataFirstValue = 0;
+            var dataArrayCount = 0;
+            byte[] dataArray = new byte[(int)(data.Length * percentageToFireEvent / 1.0)];
             for (int i = 0; i < data.Length; i++)
             {
-                data[i] = (byte)random.Next(255);
-                if (i % (data.Length * percentageToFireEvent / 1.0) == 0)
+                if (i != 0 && i % ((int)(data.Length * percentageToFireEvent / 1.0)) == 0)
                 {
+                    var dataSecondValue = i;
+                    dataArrayCount = 0;
+                    for (int j = dataFirstValue; j < dataSecondValue; j++)
+                    {
+                        dataArray[dataArrayCount] = data[j];
+                        dataArrayCount++;
+                    }
+                    File.WriteAllText($"{i / 100 + "% " + fileName}", String.Join(" ", dataArray));
+                    dataFirstValue = dataSecondValue;
                     WritingPerformed?.Invoke(this, new WritingPerformedEventArgs($"{fileName}", data, i / 100));
                 }
             }
             WritingCompleted?.Invoke(this, new WritingCompletedEventArgs("Writing Complited!"));
+            File.WriteAllText($"{100 + "% " + fileName}", String.Join(" ", data));
         }
     }
 }
