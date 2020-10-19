@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Reminder.Storage.Exceptions;
 
@@ -34,22 +35,22 @@ namespace Reminder.Storage.Memory.Tests
 			Assert.AreEqual(itemId, result.Id);
 		}
 		[Test]
-		public void Get_GivenExistingItem_ShouldAddItemInDictionary()
+		public void Get_GivenNewItem_ShouldRaiseException()
 		{
 			// Arrange
 			var itemId = Guid.NewGuid();
 			var item = ReminderItem(itemId);
-			var storage = new ReminderStorage();
+			var storage = new ReminderStorage(item);
 
 			// Act
-			storage.Add(item);
-			var test = storage.Find(item.DateTime);
+			var exception = Assert.Catch<ReminderItemAllreadyExistException>(() =>
+			storage.Add(item));
 
 			// Assert
-			Assert.Contains(item, test);
+			Assert.AreEqual(itemId, exception.Id);
 		}
 		[Test]
-		public void Get_GivenExistingItem_ShouldUpdateItemInDictionary()
+		public void Get_GivenNewItem_ShouldUpdateItemInDictionary()
 		{
 			// Arrange
 			var itemId = Guid.NewGuid();
@@ -59,10 +60,9 @@ namespace Reminder.Storage.Memory.Tests
 
 			// Act
 			storage.Update(item2);
-			var test = storage.Find(item2.DateTime);
 
 			// Assert
-			Assert.Contains(item2, test);
+			Assert;
 		}
 
 		public ReminderItem ReminderItem(Guid id)

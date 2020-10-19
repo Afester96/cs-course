@@ -22,11 +22,19 @@ namespace Reminder.Storage.Memory
 
 		public void Add(ReminderItem item)
 		{
+			if (_items.ContainsKey(item.Id))
+			{
+				throw new ReminderItemAllreadyExistException(item.Id);
+			}
 			_items.Add(item.Id, item); 
 		}
 
 		public void Update(ReminderItem item)
 		{
+			if (!_items.ContainsKey(item.Id))
+			{
+				throw new ReminderItemNotFoundException(item.Id);
+			}
 			_items[item.Id] = item;
 		}
 
