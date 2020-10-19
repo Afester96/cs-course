@@ -2,27 +2,24 @@
 
 namespace HomeWork17
 {
-    public delegate void PercentageToFire(string fileName, byte[] data, float percentageToFireEvent);
-    public delegate void PercentageToFireFinished(string text);
     public class FileWriterWithProgress
     {
-        public event PercentageToFire WritingPerformed;
-        public event PercentageToFireFinished WritingCompleted;
+        public event EventHandler<WritingPerformedEventArgs> WritingPerformed;
+        public event EventHandler<WritingCompletedEventArgs> WritingCompleted;
+
         public void WriteBytes(string fileName, byte[] data, float percentageToFireEvent)
         {
-            float percentStart = 0.001f;
-            float percentRunning = 0.001f;
-            while (percentStart < 1)
+            var random = new Random();
+
+            for (int i = 0; i < data.Length; i++)
             {
-                if (percentStart % percentageToFireEvent == 0)
+                data[i] = (byte)random.Next(255);
+                if (i % (data.Length * percentageToFireEvent / 1.0) == 0)
                 {
-                    WritingPerformed?.Invoke($"{fileName}", data, percentStart * 100);
+                    WritingPerformed?.Invoke(this, new WritingPerformedEventArgs($"{fileName}", data, i / 100));
                 }
-                percentStart += percentRunning;
-                Console.WriteLine(percentStart % percentageToFireEvent == 0);
-                Console.WriteLine(percentStart);
             }
-            WritingCompleted?.Invoke("Writing Complited!");
+            WritingCompleted?.Invoke(this, new WritingCompletedEventArgs("Writing Complited!"));
         }
     }
 }

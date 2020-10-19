@@ -7,15 +7,8 @@ namespace HomeWork17
         static void Main(string[] args)
         {
             var fileWriter = new FileWriterWithProgress();
-            var random = new Random();
             var write = new Result();
-            byte[] data = new byte[5];
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                data[i] = (byte)random.Next(0, 9);
-            }
-
+            byte[] data = new byte[10000];
 
             fileWriter.WritingPerformed += write.WriteResultData;
             fileWriter.WritingCompleted += write.WriteResultFinished;

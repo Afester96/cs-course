@@ -5,14 +5,14 @@ namespace HomeWork17
 {
     public class Result
     {
-        public void WriteResultData(string path, byte[] data, float percent)
+        public void WriteResultData(object sender, WritingPerformedEventArgs args)
         {
-            File.WriteAllText($"{path}", String.Join(" ", data));
-            Console.WriteLine($"{(int)percent} is done");
+            File.WriteAllText($"{args.FileName}", String.Join(" ", args.Data));
+            Console.WriteLine($"{args.PercentageToFireEvent} % is done");
         }
-        public void WriteResultFinished(string text)
+        public void WriteResultFinished(object sender, WritingCompletedEventArgs args)
         {
-            Console.WriteLine(text);
+            Console.WriteLine(args.Text);
         }
     }
 }
