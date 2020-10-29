@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Reminder.Storage.Memory\Reminder.Storage.Memory.csproj" />
+    <ProjectReference Include="..\Reminder.Tests\Reminder.Tests.csproj" />
   </ItemGroup>
 
 </Project>

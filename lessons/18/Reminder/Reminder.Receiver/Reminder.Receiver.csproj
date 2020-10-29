@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Telegram.Bot" Version="15.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Reminder.Storage.Memory\Reminder.Storage.Memory.csproj" />
+    <ProjectReference Include="..\Reminder.Storage\Reminder.Storage.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-namespace Reminder.Domain.Tests
+namespace Reminder.Tests
 {
 	public class Create
 	{

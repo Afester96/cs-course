@@ -5,9 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Reminder.Receiver\Reminder.Receiver.csproj" />
     <ProjectReference Include="..\Reminder.Sender\Reminder.Sender.csproj" />
-    <ProjectReference Include="..\Reminder.Storage\Reminder.Storage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Telegram.Bot" Version="15.7.1" />
   </ItemGroup>
 
 </Project>

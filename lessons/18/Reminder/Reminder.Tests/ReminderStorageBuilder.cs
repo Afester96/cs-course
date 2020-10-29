@@ -1,7 +1,7 @@
 using Reminder.Storage;
 using Reminder.Storage.Memory;
 
-namespace Reminder.Domain.Tests
+namespace Reminder.Tests
 {
 	public class ReminderStorageBuilder
 	{
@@ -9,6 +9,7 @@ namespace Reminder.Domain.Tests
 
 		public ReminderStorageBuilder WithItems(params ReminderItem[] items)
 		{
+			_items = items;
 			return this;
 		}
 

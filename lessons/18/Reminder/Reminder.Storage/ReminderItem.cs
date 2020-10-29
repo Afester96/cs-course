@@ -54,10 +54,27 @@ namespace Reminder.Storage
 			ContactId = contactId;
 		}
 
-		/// <summary>
-		///   Information about unique identifier, status, date and user id
-		/// </summary>
+		public void MarkSent() =>
+			MoveToState(ReminderItemStatus.Ready, ReminderItemStatus.Sent);
+
+		public void MarkFailed() =>
+			MoveToState(ReminderItemStatus.Ready, ReminderItemStatus.Failed);
+
+		public void MarkReady() =>
+			MoveToState(ReminderItemStatus.Created, ReminderItemStatus.Ready);
+
 		public override string ToString() =>
 			$"Reminder (id: {Id}, status: {Status}) at {DateTime:O} to {ContactId}";
+
+		private void MoveToState(ReminderItemStatus allowedStatus, ReminderItemStatus targetStatus)
+		{
+			if (Status != allowedStatus)
+			{
+				throw new InvalidOperationException(
+					$"Reminder should be in {allowedStatus} status");
+			}
+
+			Status = targetStatus;
+		}
 	}
 }

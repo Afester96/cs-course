@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Threading;
-using Reminder.Sender;
-using Reminder.Storage;
 
 namespace Reminder.Domain
 {
+	using Receiver;
+	using Sender;
+	using Sender.Exceptions;
+	using Storage;
+
 	public class ReminderScheduler : IDisposable
 	{
-		public event EventHandler<ReminderSentEventArgs> ReminderSent;
+		public event EventHandler<ReminderEventArgs> ReminderSent;
+		public event EventHandler<ReminderEventArgs> ReminderFailed;
 
 		private readonly IReminderStorage _storage;
 		private readonly IReminderSender _sender;
+		private readonly IReminderReceiver _receiver;
 		private Timer _timer;
 
 		public bool IsDisposed =>
@@ -18,15 +23,18 @@ namespace Reminder.Domain
 
 		public ReminderScheduler(
 			IReminderStorage storage,
-			IReminderSender sender)
+			IReminderSender sender,
+			IReminderReceiver receiver)
 		{
 			_storage = storage ?? throw new ArgumentNullException(nameof(storage));
 			_sender = sender ?? throw new ArgumentNullException(nameof(sender));
+			_receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
 		}
 
 		public void Start(ReminderSchedulerSettings settings)
 		{
 			_timer = new Timer(OnTimerTick, null, settings.TimerDelay, settings.TimerInterval);
+			_receiver.MessageReceived += OnMessageReceived;
 		}
 
 		public void Dispose()
@@ -47,17 +55,48 @@ namespace Reminder.Domain
 
 			foreach (var reminder in reminders)
 			{
-				reminder.Status = ReminderItemStatus.Ready;
-				_sender.Send(
-					new ReminderNotification(
-						reminder.ContactId, 
-						reminder.Message, 
-						reminder.DateTime
-					)
-				);
-				reminder.MarkSent();
-				ReminderSent?.Invoke(this, new ReminderSentEventArgs(reminder));
+				reminder.MarkReady();
+
+				try
+				{
+					_sender.Send(
+						new ReminderNotification(
+							reminder.ContactId,
+							reminder.Message,
+							reminder.DateTime
+						)
+					);
+					OnReminderSent(reminder);
+				}
+				catch (ReminderSenderException)
+				{
+					OnReminderFailed(reminder);
+				}
 			}
+		}
+
+		private void OnMessageReceived(object sender, MessageReceivedEventArgs args)
+		{
+			var item = new ReminderItem(
+				Guid.NewGuid(),
+				ReminderItemStatus.Created,
+				args.Message.DateTime,
+				args.Message.Text,
+				args.ContactId
+			);
+			_storage.Add(item);
+		}
+
+		private void OnReminderSent(ReminderItem reminder)
+		{
+			reminder.MarkSent();
+			ReminderSent?.Invoke(this, new ReminderEventArgs(reminder));
+		}
+
+		private void OnReminderFailed(ReminderItem reminder)
+		{
+			reminder.MarkFailed();
+			ReminderFailed?.Invoke(this, new ReminderEventArgs(reminder));
 		}
 	}
 }
