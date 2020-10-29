@@ -40,8 +40,6 @@ namespace Reminder.Storage.Memory
 
 		public ReminderItem Get(Guid id)
 		{
-			// ContainsKey + indexer -> TryGetValue
-
 			if (!_items.TryGetValue(id, out var item))
 			{
 				throw new ReminderItemNotFoundException(id);
