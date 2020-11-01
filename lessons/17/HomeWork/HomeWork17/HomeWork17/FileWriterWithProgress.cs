@@ -16,7 +16,7 @@ namespace HomeWork17
                 {
                     if (i != 0 && i % (GetNumber(data, percentageToFireEvent)) == 0)
                     {
-                        fs.Write(data, (GetNumber(data, percentageToFireEvent)), (GetNumber(data, percentageToFireEvent)));
+                        fs.Write(data, i - (GetNumber(data, percentageToFireEvent)), (GetNumber(data, percentageToFireEvent)));
                         WritingPerformed?.Invoke(this, new WritingPerformedEventArgs($"{fileName}", data, i / 100));
                     }
                 }
