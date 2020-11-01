@@ -12,7 +12,7 @@ namespace HomeWork17
         {
             using (FileStream fs = File.OpenWrite(fileName))
             {
-                for (int i = 0; i < data.Length; i++)
+                for (int i = 0; i <= data.Length; i++)
                 {
                     if (i != 0 && i % (GetNumber(data, percentageToFireEvent)) == 0)
                     {
