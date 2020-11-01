@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminder.Sender.Telegram", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminder.Tests", "Reminder.Tests\Reminder.Tests.csproj", "{C36CA42B-ED2D-4C96-9ED4-CAE74F83C5DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.LogWriter", "Reminder.LogWriter\Reminder.LogWriter.csproj", "{6A450EA0-9E2B-4A7F-8D28-25B1580BF3BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{C36CA42B-ED2D-4C96-9ED4-CAE74F83C5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C36CA42B-ED2D-4C96-9ED4-CAE74F83C5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C36CA42B-ED2D-4C96-9ED4-CAE74F83C5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A450EA0-9E2B-4A7F-8D28-25B1580BF3BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A450EA0-9E2B-4A7F-8D28-25B1580BF3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A450EA0-9E2B-4A7F-8D28-25B1580BF3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A450EA0-9E2B-4A7F-8D28-25B1580BF3BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

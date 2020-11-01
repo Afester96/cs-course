@@ -16,7 +16,18 @@ namespace Reminder.Sender.Telegram
 
 		public void Send(ReminderNotification item)
 		{
-			var text = $"{item.Message} at {item.DateTime:R}";
+			string text;
+			if (item.Message == "info")
+			{
+				text = @"Hello! If you want to use reminder, please write this:
+<Message>
+<DateTimeUtc>
+Messages without datetime returns imideatly";
+			}
+			else
+			{
+				text = $"{item.Message} at {item.DateTime:R}";
+			}
 			var chatId = new ChatId(long.Parse(item.ContactId));
 
 			try

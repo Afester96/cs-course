@@ -8,7 +8,7 @@ namespace Reminder.Receiver
 
 	public class MessagePayload
 	{
-		private static Dictionary<string, Func<double, TimeSpan>> WellKnownKeys =
+		private static readonly Dictionary<string, Func<double, TimeSpan>> WellKnownKeys =
 			new Dictionary<string, Func<double, TimeSpan>>
 			{
 				["sec"] = TimeSpan.FromSeconds,
@@ -39,6 +39,12 @@ namespace Reminder.Receiver
 			var text = parts[0].Trim();
 			if (parts.Length == 1)
 			{
+				payload = new MessagePayload(text, DateTimeOffset.UtcNow);
+			}
+
+			if (parts.Length == 1 && text.ToLower() == "info")
+			{
+				text = "info";
 				payload = new MessagePayload(text, DateTimeOffset.UtcNow);
 			}
 
