@@ -42,7 +42,7 @@ namespace HomeWork22.Controllers
             return CreatedAtAction("Get", new { id = city.Id }, city);
         }
 
-        [HttpPost]
+        [HttpPut]
         public IActionResult Put([FromBody] CityCreateViewModel info, Guid id)
         {
             if (id == null)
@@ -54,7 +54,7 @@ namespace HomeWork22.Controllers
             return Ok(city);
         }
 
-        [HttpPost]
+        [HttpDelete]
         public IActionResult Delete(Guid id)
         {
             var city = Storage
