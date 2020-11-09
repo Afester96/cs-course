@@ -45,13 +45,15 @@ namespace HomeWork22.Controllers
         [HttpPut]
         public IActionResult Put([FromBody] CityCreateViewModel info, Guid id)
         {
-            if (id == null)
-                return NotFound();
             var city = Storage
                 .Cities
                 .FirstOrDefault(_ => _.Id == id);
-            city = new City(id, info.Title, info.Description, info.Population);
-            return Ok(city);
+            if (city == null)
+                return NotFound();
+            var updatedCity = new City(city.Id, city.Title, info.Description, info.Population);
+            Storage.Cities.Add(updatedCity);
+            Storage.Cities.Remove(city);
+            return Ok(updatedCity);
         }
 
         [HttpDelete]
@@ -62,6 +64,7 @@ namespace HomeWork22.Controllers
                 .FirstOrDefault(_ => _.Id == id);
             if (city == null)
                 return NotFound();
+            Storage.Cities.Remove(city);
             return NoContent();
         }
     }
