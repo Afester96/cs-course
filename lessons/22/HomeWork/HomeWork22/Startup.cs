@@ -1,5 +1,5 @@
+using HomeWork22.Model;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
@@ -9,9 +9,12 @@ namespace HomeWork22
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddSingleton(provider => new Storage());
+
 			services
 				.AddControllers()
 				.AddXmlSerializerFormatters();
+			
 			services.AddSwaggerGen(options =>
 				options.SwaggerDoc("cities",
 					new OpenApiInfo
@@ -23,14 +26,10 @@ namespace HomeWork22
 			);
 		}
 
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app)
 		{
 			app.UseSwagger();
-			app.UseSwaggerUI(options =>
-				{
-					options.SwaggerEndpoint("cities/swagger.json", "Cities API");
-				}
-			);
+			app.UseSwaggerUI(options => options.SwaggerEndpoint("cities/swagger.json", "Cities API"));
 			app.UseRouting();
 			app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 		}

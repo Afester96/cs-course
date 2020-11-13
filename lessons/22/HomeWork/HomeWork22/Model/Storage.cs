@@ -5,12 +5,9 @@ namespace HomeWork22.Model
 {
 	public class Storage
 	{
-		public static Storage Instance { get; } =
-			new Storage();
-
 		public List<City> Cities { get; }
 
-		private Storage()
+		public Storage()
 		{
 			Cities = new List<City>
 			{
