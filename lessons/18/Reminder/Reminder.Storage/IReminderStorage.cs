@@ -33,6 +33,6 @@ namespace Reminder.Storage
 		/// </summary>
 		/// <param name="datetime"></param>
 		/// <returns></returns>
-		ReminderItem[] Find(DateTimeOffset datetime);
+		ReminderItem[] Find(DateTimeOffset datetime, ReminderItemStatus status = ReminderItemStatus.Created);
 	}
 }

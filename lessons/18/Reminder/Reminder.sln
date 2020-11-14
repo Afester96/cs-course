@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7D514472
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "telegram", "telegram", "{C9564E06-328C-428D-9925-0EC7F00BB01B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.WebApi", "Reminder.WebApi\Reminder.WebApi.csproj", "{BBD06D6C-BAA3-4CC5-ABCF-05705216CDBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{C36CA42B-ED2D-4C96-9ED4-CAE74F83C5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C36CA42B-ED2D-4C96-9ED4-CAE74F83C5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C36CA42B-ED2D-4C96-9ED4-CAE74F83C5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBD06D6C-BAA3-4CC5-ABCF-05705216CDBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBD06D6C-BAA3-4CC5-ABCF-05705216CDBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBD06D6C-BAA3-4CC5-ABCF-05705216CDBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBD06D6C-BAA3-4CC5-ABCF-05705216CDBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
