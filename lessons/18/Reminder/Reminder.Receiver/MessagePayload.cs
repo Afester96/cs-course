@@ -8,7 +8,12 @@ namespace Reminder.Receiver
 
 	public class MessagePayload
 	{
-		private static readonly Dictionary<string, Func<double, TimeSpan>> WellKnownKeys =
+		public static readonly string[] Separators = new[] { "\n", "\t", ",", ";" };
+
+		public static IEnumerable<string> WellKnownKeys =>
+			OffsetMap.Keys;
+
+		private static readonly Dictionary<string, Func<double, TimeSpan>> OffsetMap =
 			new Dictionary<string, Func<double, TimeSpan>>
 			{
 				["sec"] = TimeSpan.FromSeconds,
@@ -30,7 +35,12 @@ namespace Reminder.Receiver
 		{
 			payload = default;
 
-			var parts = message.Split(new[] {"\n", "\t", ",", ";"}, StringSplitOptions.RemoveEmptyEntries);
+			if (string.IsNullOrWhiteSpace(message))
+			{
+				return false;
+			}
+
+			var parts = message.Split(Separators, StringSplitOptions.RemoveEmptyEntries);
 			if (parts.Length == 0)
 			{
 				return false;
@@ -59,15 +69,23 @@ namespace Reminder.Receiver
 		private static bool TryParseDateTime(string text, out DateTimeOffset datetime)
 		{
 			var parts = text.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-			if (parts.Length == 2 && 
-				int.TryParse(parts[0], out var count) &&
-				WellKnownKeys.TryGetValue(parts[1].ToLower(), out var offset))
+			if (parts.Length != 2)
 			{
-				datetime = DateTimeOffset.UtcNow.Add(offset(count));
-				return true;
+				return DateTimeOffset.TryParse(text, out datetime);
 			}
 
-			return DateTimeOffset.TryParse(text, out datetime);
+			if (!int.TryParse(parts[0], out var count))
+			{
+				return DateTimeOffset.TryParse(text, out datetime);
+			}
+
+			if (!OffsetMap.TryGetValue(parts[1].ToLower(), out var offset))
+			{
+				return DateTimeOffset.TryParse(text, out datetime);
+			}
+
+			datetime = DateTimeOffset.UtcNow.Add(offset(count));
+			return true;
 		}
 	}
 }
