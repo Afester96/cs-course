@@ -29,10 +29,10 @@ namespace Reminder.WebApi.Controllers
 			var items = _storage.Find(model.DateTime, model.Status);
 			if (model.DateTime == null)
 			{
-				var item = model.DateTime;
+				var item = model.Status;
 				return Ok(item);
 			}
-			if (model.Status == ReminderItemStatus.Created)
+			if (model.Status == ReminderItemStatus.Created && model.DateTime != null)
 			{
 				var item = model.Status;
 				return Ok(item);
