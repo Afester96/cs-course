@@ -10,7 +10,7 @@ namespace HomeWork22
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddSingleton<IStorage, Storage>();
+			//services.AddSingleton<IStorage, Storage>();
 
 			services
 				.AddControllers()
