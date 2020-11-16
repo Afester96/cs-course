@@ -4,31 +4,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HomeWork22.Controllers
 {
+    using HomeWork22.Storage;
     using Model;
     using ViewModels;
 
     [Route("/api/cities")]
     public class CityController : Controller
     {
-        public Storage Storage { get; }
-        
-        public CityController(Storage storage)
-        {
-            Storage = storage;
-        }
+        private readonly IStorage _storage;
 
-        [HttpGet]
-        public IActionResult List()
+        public CityController(IStorage storage)
         {
-            return Ok(Storage.Cities);
+            _storage = storage;
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
-            var city = Storage
-                .Cities
-                .FirstOrDefault(_ => _.Id == id);
+            var city = _storage.Get(id);
 
             if (city == null)
             {
@@ -52,18 +45,13 @@ namespace HomeWork22.Controllers
                 info.Description.Trim().Capitalize(),
                 info.Population);
 
-            var duplicate = Storage.Cities.FirstOrDefault(_ => _.Title == city.Title);
-            if (duplicate != null)
-            {
-                ModelState.AddModelError("Title", "Duplicate value");
-            }
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Storage.Cities.Add(city);
+            _storage.Add(city);
 
             return CreatedAtAction("Get", new { id = city.Id }, city);
         }
@@ -76,9 +64,7 @@ namespace HomeWork22.Controllers
                 return BadRequest(ModelState);
             }
             
-            var city = Storage
-                .Cities
-                .FirstOrDefault(_ => _.Id == id);
+            var city = _storage.Get(id);
             
             if (city == null)
                 return NotFound();
@@ -100,9 +86,9 @@ namespace HomeWork22.Controllers
                 return BadRequest(ModelState);
             }
 
-            Storage.Cities.Add(updatedCity);
+            _storage.Add(updatedCity);
             
-            Storage.Cities.Remove(city);
+            _storage.Delete(city);
             
             return Ok(updatedCity);
         }
@@ -115,14 +101,12 @@ namespace HomeWork22.Controllers
                 return BadRequest(ModelState);
             }
 
-            var city = Storage
-                .Cities
-                .FirstOrDefault(_ => _.Id == id);
+            var city = _storage.Get(id);
 
             if (city == null)
                 return NotFound();
 
-            Storage.Cities.Remove(city);
+            _storage.Delete(city);
 
             return NoContent();
         }

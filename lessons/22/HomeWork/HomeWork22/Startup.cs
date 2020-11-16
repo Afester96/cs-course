@@ -1,4 +1,5 @@
 using HomeWork22.Model;
+using HomeWork22.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -9,7 +10,7 @@ namespace HomeWork22
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddSingleton(provider => new Storage());
+			services.AddSingleton<IStorage, Storage>();
 
 			services
 				.AddControllers()
