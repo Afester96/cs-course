@@ -28,10 +28,9 @@ INSERT INTO [Contact] VALUES
     ('PS3811123'),
     ('LOTR9291923')
 
-CREATE table [Storage]
+CREATE table [ReminderItem]
 (
-    [Id] [int] not NULL identity(1,1),
-    [Guid] [char] (32) NOT NULL ,
+    [Id] [uniqueidentifier] NOT NULL default NEWID() ,
     [DateTime] [datetimeoffset] NOT NULL,
     [StatusId] [int] NOT NULL,
     [Message] [nvarchar] (512) NULL,
@@ -48,14 +47,16 @@ CREATE table [Storage]
             On UPDATE CASCADE
 );
 
-insert into [Storage] VALUES
-    ('22345200abe84f6090c80d43c5f6c0f6', '2020-12-17 11:19:20 +03:00', 1, 'Не забыть сходить в рейд', 1),
-    ('22345200ase84s6000c80d43c5f6c0f6', '2020-11-22 11:19:20 +03:00', 2, 'Купить подарки на новый год', 3),
-    ('22345200abe84s1050c86d47c5f2c0f6', '2020-11-14 11:19:20 +03:00', 3, 'Оплатить интернет', 2),
-    ('22323200abe84f6090c80d43c5f6c0f6', '2020-12-17 11:19:20 +03:00', 4, 'Поздравить с др друга', 4)
+insert into [ReminderItem] VALUES
+    (default, '2020-12-17 11:19:20 +03:00', 1, 'Не забыть сходить в рейд', 1),
+    (default, '2020-11-22 11:19:20 +03:00', 2, 'Купить подарки на новый год', 3),
+    (default, '2020-11-14 11:19:20 +03:00', 3, 'Оплатить интернет', 2),
+    (default, '2020-12-17 11:19:20 +03:00', 4, 'Поздравить с др друга', 4)
 
 select * from [Status]
 select * from [Contact]
-select * from [Storage]
+select * from [ReminderItem]
 
-drop table [storage]
+drop table [Status]
+drop table [Contact]
+drop table [ReminderItem]
