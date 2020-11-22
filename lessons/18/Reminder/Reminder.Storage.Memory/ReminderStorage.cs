@@ -58,10 +58,19 @@ namespace Reminder.Storage.Memory
 
         public ReminderItem[] FindBy(ReminderItemFilter filter)
         {
-            return _items.Values
-                .Where(item => item.DateTime <= filter.DateTime && item.Status == filter.Status)
-                .OrderByDescending(item => item.DateTime)
-                .ToArray();
+            var line = _items.Values.AsEnumerable();
+
+            if (filter.DateTime.HasValue)
+            {
+                line = line.Where(item => item.DateTime <= filter.DateTime.Value);
+            }
+
+            if (filter.Status.HasValue)
+            {
+                line = line.Where(item => item.Status == filter.Status.Value);
+            }
+
+            return line.ToArray();
         }
     }
 }
