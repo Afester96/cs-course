@@ -62,7 +62,7 @@ namespace Reminder.Domain
 			_logger.LogDebug("Ticked timer");
 
 			var datetime = DateTimeOffset.UtcNow;
-			var reminders = _storage.Find(datetime);
+			var reminders = _storage.FindBy(ReminderItemFilter.CreatedAt(datetime));
 
 			foreach (var reminder in reminders)
 			{

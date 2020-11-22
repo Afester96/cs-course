@@ -1,5 +1,7 @@
 using System;
 using System.Threading;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using Reminder.Sender;
 using Reminder.Storage;
@@ -28,11 +30,14 @@ namespace Reminder.Domain.Tests
 		public IReminderStorage Storage =>
 			Create.Storage.Build();
 
+		public ILogger<ReminderScheduler> Logger =>
+			NullLogger<ReminderScheduler>.Instance;
+
 		[Test]
 		public void GivenReminderWithPastDateAndSuccessSender_ShouldRaiseSentEvent()
 		{
 			var raised = false;
-			using var scheduler = new ReminderScheduler(Storage, SuccessSender, Receiver);
+			using var scheduler = new ReminderScheduler(Logger, Storage, SuccessSender, Receiver);
 			scheduler.ReminderSent += (sender, args) => raised = true;
 
 			scheduler.Start(DefaultSettings);
@@ -46,7 +51,7 @@ namespace Reminder.Domain.Tests
 		public void GivenReminderWithPastDateAndFailedSender_ShouldRaiseFailedEvent()
 		{
 			var raised = false;
-			using var scheduler = new ReminderScheduler(Storage, FailedSender, Receiver);
+			using var scheduler = new ReminderScheduler(Logger, Storage, FailedSender, Receiver);
 			scheduler.ReminderFailed += (sender, args) => raised = true;
 
 			scheduler.Start(DefaultSettings);

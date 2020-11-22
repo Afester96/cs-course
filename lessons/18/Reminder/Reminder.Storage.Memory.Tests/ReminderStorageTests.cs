@@ -100,7 +100,7 @@ namespace Reminder.Storage.Memory.Tests
 				Create.Reminder.AtDatetime(datetime.AddSeconds(1))
 			);
 
-			var result = storage.Find(datetime);
+			var result = storage.FindBy(ReminderItemFilter.CreatedAt(datetime));
 
 			CollectionAssert.IsEmpty(result);
 		}
@@ -114,7 +114,7 @@ namespace Reminder.Storage.Memory.Tests
 				Create.Reminder.AtDatetime(datetime)
 			);
 
-			var result = storage.Find(datetime);
+			var result = storage.FindBy(ReminderItemFilter.CreatedAt(datetime));
 
 			CollectionAssert.IsNotEmpty(result);
 		}

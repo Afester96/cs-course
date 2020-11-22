@@ -48,10 +48,18 @@ namespace Reminder.Storage.Memory
             return item;
         }
 
-        public ReminderItem[] Find(DateTimeOffset datetime, ReminderItemStatus status)
+        //public ReminderItem[] Find(DateTimeOffset datetime, ReminderItemStatus status)
+        //{
+        //    return _items.Values
+        //        .Where(item => item.DateTime <= datetime && item.Status == status)
+        //        .OrderByDescending(item => item.DateTime)
+        //        .ToArray();
+        //}
+
+        public ReminderItem[] FindBy(ReminderItemFilter filter)
         {
             return _items.Values
-                .Where(item => item.DateTime <= datetime && item.Status == status)
+                .Where(item => item.DateTime <= filter.DateTime && item.Status == filter.Status)
                 .OrderByDescending(item => item.DateTime)
                 .ToArray();
         }

@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace Reminder.Receiver
 {
-	// "Hello" ->
-	//  Text + DateTimeOffset
-
 	public class MessagePayload
 	{
 		public static readonly string[] Separators = new[] { "\n", "\t", ",", ";" };
