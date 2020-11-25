@@ -45,11 +45,10 @@ namespace Reminder.Storage.WebApi
 
             var dto = JsonSerializer.Deserialize<ReminderItemDto[]>(content);
             var array = new ReminderItem[dto.Length];
-            for (int i = 0; i < dto.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                array[i] = dto[i]; 
+                array[i] = new ReminderItem(dto[i].Id,dto[i].Status,dto[i].DateTime,dto[i].Message,dto[i].ContactId);
             }
-            array = dto;
             return array;
         }
 
