@@ -1,4 +1,5 @@
 ﻿using Reminder.Storage.Exceptions;
+using Reminder.Storage.WebApi.Dto;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -42,7 +43,14 @@ namespace Reminder.Storage.WebApi
                 .GetAwaiter()
                 .GetResult();
 
-            return JsonSerializer.Deserialize<ReminderItem[]>(content);
+            var dto = JsonSerializer.Deserialize<ReminderItemDto[]>(content);
+            var array = new ReminderItem[dto.Length];
+            for (int i = 0; i < dto.Length; i++)
+            {
+                array[i] = dto[i]; 
+            }
+            array = dto;
+            return array;
         }
 
         public ReminderItem Get(Guid id)
@@ -60,7 +68,7 @@ namespace Reminder.Storage.WebApi
                 .GetAwaiter()
                 .GetResult();
 
-            var dto = JsonSerializer.Deserialize<ReminderItem>(content);
+            var dto = JsonSerializer.Deserialize<ReminderItemDto>(content);
             return new ReminderItem(
                 dto.Id,
                 dto.Status,
@@ -72,39 +80,16 @@ namespace Reminder.Storage.WebApi
 
         public void Update(ReminderItem item)
         {
-            var asyncMessage = _client.GetAsync($"{ApiPrefix}/{item.Id:N}")
+            var json = JsonSerializer.Serialize(item);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            var message = _client.PutAsync($"{ApiPrefix}/{item.Id:N}",content)
                 .GetAwaiter()
                 .GetResult();
-
-            if (asyncMessage.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new ReminderItemNotFoundException(item.Id);
-            }
-
-            var oldContent = asyncMessage.Content.ReadAsStringAsync()
-                .GetAwaiter()
-                .GetResult();
-
-            var dto = JsonSerializer.Deserialize<ReminderItem>(oldContent);
             
-            var newReminderItem = new ReminderItem(
-                dto.Id,
-                item.Status,
-                dto.DateTime,
-                item.Message,
-                dto.ContactId
-                );
-
-            var newJson = JsonSerializer.Serialize(newReminderItem);
-
-            var newStringContent = new StringContent(newJson, Encoding.Unicode, "application/json");
-            _client.DeleteAsync($"{ApiPrefix}/{item.Id:N}")
-                .GetAwaiter()
-                .GetResult();
-
-            _client.PostAsync(ApiPrefix, newStringContent)
-                .GetAwaiter()
-                .GetResult();
+            if (message.StatusCode == HttpStatusCode.Conflict)
+            {
+                throw new ReminderItemAllreadyExistException(item.Id);
+            }
         }
     }
 }
