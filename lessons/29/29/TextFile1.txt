@@ -1,0 +1,23 @@
+WITH BestCustomerPerYear ([Year], [Years], [CustomerId], [Name], [Count]) AS (
+select 
+o.OrderDate,
+year(o.OrderDate) as Years,
+o.CustomerId, 
+c.Name,
+ol.Count
+from [order] o
+join [orderline] ol 
+    on ol.orderid = o.id
+join [Customer] c 
+    on c.Id = o.CustomerId
+join [Product] p 
+    on ol.productId = p.Id
+GROUP by o.OrderDate, o.CustomerId, c.Name, ol.Count
+)
+select 
+Years,
+customerId,
+[name],
+sum(count) as Sum
+from BestCustomerPerYear
+group by Years, CustomerId, [Name]
