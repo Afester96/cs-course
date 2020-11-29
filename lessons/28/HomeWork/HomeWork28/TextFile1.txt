@@ -1,0 +1,87 @@
+-- ADD UPDATE GET FIND
+--ADD
+CREATE PROCEDURE [CreateReminderItem] (
+    @Id uniqueidentifier output,
+    @DateTime datetimeoffset,
+    @StatusId int,
+    @Message nvarchar (512),
+    @ContactId int
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    Set @Id = NEWID()
+    INSERT into [ReminderItem] ([Id],[DateTime],[StatusId],[Message],[ContactId]) VALUES (@Id, @DateTime, @StatusId, @Message, @ContactId)
+END
+GO
+
+DECLARE @id UNIQUEIDENTIFIER;
+
+EXEC [k_gvozdev_schema].CreateReminderItem
+    @Id = @Id output,
+    @DateTime = '2020-12-17 11:20:20 +03:00',
+    @StatusId = 2,
+    @Message = 'Не забыть сходить в рейд2',
+    @ContactId = 2;
+
+SELECT @id;
+
+select*from ReminderItem
+
+DROP PROCEDURE [CreateReminderItem];
+
+--GET/FIND
+CREATE PROCEDURE [GetReminderItem] (
+    @Id uniqueidentifier
+)
+AS
+BEGIN
+    SELECT * FROM [ReminderItem]
+    where @Id = [Id];
+END
+GO
+
+EXECUTE GetReminderItem
+@id = 'fae636bb-6c05-4120-aecd-19e80495f100';
+
+DROP PROCEDURE [GetReminderItem];
+
+--UPDATE
+create PROCEDURE [UpdateReminderItem]
+(
+    @Id uniqueidentifier,
+    @DateTime datetimeoffset,
+    @StatusId int,
+    @Message nvarchar (512),
+    @ContactId int
+)
+AS
+BEGIN
+    UPDATE [ReminderItem]
+    set [DateTime] = @DateTime,
+    [StatusId] = @StatusId,
+    [Message] = @Message,
+    [ContactId] = @ContactId
+    WHERE [Id] = @Id;
+END
+go
+
+EXEC [UpdateReminderItem]
+@Id = 'fae636bb-6c05-4120-aecd-19e80495f100',
+@DateTime = '2020-11-22 11:19:20.0000000 +03:00',
+@StatusId = 3,
+@Message = 'Купить подарки на новый год',
+@ContactId = 3;
+
+Select * FROM [ReminderItem]
+Where [ID] = 'fae636bb-6c05-4120-aecd-19e80495f100';
+
+--JOIN
+SELECT *
+FROM [ReminderItem] AS R
+
+JOIN [Status] AS S
+	ON S.Id = R.StatusId
+
+JOIN [Contact] AS C
+    ON C.Id = R.ContactId
