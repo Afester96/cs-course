@@ -1,23 +1,41 @@
-WITH BestCustomerPerYear ([Year], [Years], [CustomerId], [Name], [Count]) AS (
-select 
-o.OrderDate,
-year(o.OrderDate) as Years,
-o.CustomerId, 
-c.Name,
-ol.Count
-from [order] o
-join [orderline] ol 
-    on ol.orderid = o.id
-join [Customer] c 
-    on c.Id = o.CustomerId
-join [Product] p 
-    on ol.productId = p.Id
-GROUP by o.OrderDate, o.CustomerId, c.Name, ol.Count
+
+WITH CustomerDiscount([Id], [Discount], [Year], [Total])
+AS (
+ SELECT
+    O.Customerid,
+    O.Discount,
+    YEAR(O.OrderDate),
+    SUM(OL.Count * P.Price) * (1 - ISNULL(O.Discount, 0))
+  FROM [Order] O
+  JOIN [orderline] OL
+    ON OL.OrderId = O.Id
+  JOIN [Product] P
+    ON OL.ProductId = P.Id
+ GROUP BY YEAR(O.OrderDate), O.CustomerId, O.Discount
+),
+CustomerTotal([Id], [Year], [Total]) AS (
+  SELECT
+    Id,
+    [Year],
+    SUM(Total)
+  FROM CustomerDiscount
+ GROUP BY [Year], Id
+),
+BestTotalPerYear([Year], [Max]) as(
+    select 
+    Year,
+    Max(Total)
+    from CustomerTotal
+    group by Year
 )
-select 
-Years,
-customerId,
-[name],
-sum(count) as Sum
-from BestCustomerPerYear
-group by Years, CustomerId, [Name]
+ SELECT
+    BT.Year,
+    CT.Id,
+    C.Name,
+    BT.Max
+  FROM BestTotalPerYear BT
+  JOIN CustomerTotal CT
+    ON CT.Total = BT.Max
+  JOIN Customer C
+    ON c.Id = CT.Id
+ ORDER BY BT.Year
