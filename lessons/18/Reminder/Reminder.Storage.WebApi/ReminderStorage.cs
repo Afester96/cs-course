@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Linq;
 
 namespace Reminder.Storage.WebApi
 {
@@ -44,12 +45,14 @@ namespace Reminder.Storage.WebApi
                 .GetResult();
 
             var dto = JsonSerializer.Deserialize<ReminderItemDto[]>(content);
-            var array = new ReminderItem[dto.Length];
-            for (int i = 0; i < array.Length; i++)
-            {
-                array[i] = new ReminderItem(dto[i].Id,dto[i].Status,dto[i].DateTime,dto[i].Message,dto[i].ContactId);
-            }
-            return array;
+            
+            return dto.Select(_=> new ReminderItem(
+                    _.Id,
+                    _.Status,
+                    _.DateTime,
+                    _.Message,
+                    _.ContactId))
+                .ToArray<ReminderItem>();
         }
 
         public ReminderItem Get(Guid id)
