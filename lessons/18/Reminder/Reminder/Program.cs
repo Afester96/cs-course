@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.Extensions.Logging;
-using Reminder.Domain;
-using Reminder.Receiver.Telegram;
-using Reminder.Sender.Telegram;
-using Reminder.Storage.Memory;
-
 
 namespace Reminder
 {
-	class Program
+	using Domain;
+	using Receiver.Telegram;
+	using Sender.Telegram;
+	using Reminder.Storage.SqlServer;
+    using System.Threading.Tasks;
+
+    class Program
 	{
 		private const string TelegramToken = "1194138212:AAECudhNDJkrmuVxhHSCzixX7MAq-jRrMtI";
+
+		private const string ConnectionString = "Server=tcp:shadow-art.database.windows.net,1433;Initial Catalog=reminder;Persist Security Info=False;Encrypt=True;";
 
 		private static readonly ILoggerFactory Logging = LoggerFactory.Create(_ =>
 		{
@@ -20,27 +24,30 @@ namespace Reminder
 		);
 
 		private static readonly ILogger Logger = Logging.CreateLogger<Program>();
+		private static readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
 
-		static void Main(string[] args)
+		static async Task Main()
 		{
-			using var scheduler = new ReminderScheduler(
+			var scheduler = new ReminderScheduler(
 				Logging.CreateLogger<ReminderScheduler>(),
-				new ReminderStorage(),
+				new ReminderStorage(ConnectionString),
 				new ReminderSender(TelegramToken),
 				new ReminderReceiver(TelegramToken)
 			);
 			scheduler.ReminderSent += OnReminderSent;
 			scheduler.ReminderFailed += OnReminderFailed;
-			scheduler.Start(
+			await scheduler.StartAsync(
 				new ReminderSchedulerSettings
 				{
 					TimerDelay = TimeSpan.Zero,
 					TimerInterval = TimeSpan.FromSeconds(1)
-				}
+				},
+				CancellationTokenSource.Token
 			);
 			Logger.LogInformation("Waiting reminders..");
 			Logger.LogInformation("Press any key to stop");
 			Console.ReadKey();
+			CancellationTokenSource.Cancel();
 		}
 
 		private static void OnReminderSent(object sender, ReminderEventArgs args) =>

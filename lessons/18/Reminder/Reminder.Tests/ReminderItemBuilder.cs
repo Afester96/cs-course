@@ -8,8 +8,8 @@ namespace Reminder.Tests
 		private Guid _id = Guid.NewGuid();
 		private ReminderItemStatus _status = ReminderItemStatus.Created;
 		private DateTimeOffset _datetime = DateTimeOffset.UtcNow;
-		private string _message;
-		private string _contact;
+		private string _message = "Test";
+		private string _contact = "Contact";
 
 		public ReminderItemBuilder WithId(Guid id)
 		{
@@ -29,6 +29,12 @@ namespace Reminder.Tests
 			return this;
 		}
 
+		public ReminderItemBuilder WithStatus(ReminderItemStatus status)
+		{
+			_status = status;
+			return this;
+		}
+
 		public ReminderItemBuilder AtDatetime(DateTimeOffset datetime)
 		{
 			_datetime = datetime;
@@ -38,7 +44,7 @@ namespace Reminder.Tests
 		public ReminderItemBuilder AtUtcNow() =>
 			AtDatetime(DateTimeOffset.UtcNow);
 
-		public ReminderItem Please() => 
+		public ReminderItem Please() =>
 			new ReminderItem(_id, _status, _datetime, _message, _contact);
 
 		public static implicit operator ReminderItem(ReminderItemBuilder builder) =>

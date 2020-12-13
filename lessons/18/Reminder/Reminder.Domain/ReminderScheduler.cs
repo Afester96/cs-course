@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace Reminder.Domain
@@ -9,7 +10,7 @@ namespace Reminder.Domain
 	using Sender.Exceptions;
 	using Storage;
 
-	public class ReminderScheduler : IDisposable
+	public class ReminderScheduler
 	{
 		public event EventHandler<ReminderEventArgs> ReminderSent;
 		public event EventHandler<ReminderEventArgs> ReminderFailed;
@@ -18,10 +19,6 @@ namespace Reminder.Domain
 		private readonly IReminderStorage _storage;
 		private readonly IReminderSender _sender;
 		private readonly IReminderReceiver _receiver;
-		private Timer _timer;
-
-		public bool IsDisposed =>
-			_timer == null;
 
 		public ReminderScheduler(
 			ILogger<ReminderScheduler> logger,
@@ -35,56 +32,49 @@ namespace Reminder.Domain
 			_receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
 		}
 
-		public void Start(ReminderSchedulerSettings settings)
+		public async Task StartAsync(
+			ReminderSchedulerSettings settings,
+			CancellationToken cancellationToken = default)
 		{
 			_logger.LogInformation("Starting reminders scheduling");
-			_timer = new Timer(OnTimerTick, null, settings.TimerDelay, settings.TimerInterval);
 			_receiver.MessageReceived += OnMessageReceived;
+
+			await Task.Delay(settings.TimerDelay, cancellationToken);
 			_logger.LogInformation("Started reminders scheduling");
-		}
 
-		public void Dispose()
-		{
-			if (IsDisposed)
+			while (!cancellationToken.IsCancellationRequested)
 			{
-				return;
+				await OnTickAsync();
+				await Task.Delay(settings.TimerInterval, cancellationToken);
 			}
-
-			_logger.LogInformation("Stopping reminders scheduling");
-			_receiver.MessageReceived -= OnMessageReceived;
-			_timer.Dispose();
-			_timer = null;
-			_logger.LogInformation("Stopped reminders scheduling");
 		}
 
-		private void OnTimerTick(object state)
+		private async Task OnTickAsync()
 		{
 			_logger.LogDebug("Ticked timer");
 
-			var datetime = DateTimeOffset.UtcNow;
-			var reminders = _storage.FindBy(ReminderItemFilter.CreatedAt(datetime));
-
-			foreach (var reminder in reminders)
+			foreach (var reminder in await _storage.FindByAsync(ReminderItemFilter.CreatedAtNow()))
 			{
 				_logger.LogInformation($"Mark reminder {reminder.Id:N} as ready");
 				reminder.MarkReady();
+				await _storage.UpdateAsync(reminder);
 
 				try
 				{
 					_logger.LogInformation($"Sending reminder {reminder.Id:N}");
-					_sender.Send(
+					await _sender.SendAsync(
 						new ReminderNotification(
 							reminder.ContactId,
 							reminder.Message,
 							reminder.DateTime
 						)
 					);
-					OnReminderSent(reminder);
+					await OnReminderSentAsync(reminder);
 				}
 				catch (ReminderSenderException exception)
 				{
 					_logger.LogError(exception, "Exception occured while sending notification");
-					OnReminderFailed(reminder);
+					await OnReminderFailedAsync(reminder);
 				}
 			}
 		}
@@ -100,21 +90,23 @@ namespace Reminder.Domain
 				args.Message.Text,
 				args.ContactId
 			);
-			_storage.Add(item);
+			_ = _storage.AddAsync(item);
 			_logger.LogInformation($"Created reminder {item.Id:N}");
 		}
 
-		private void OnReminderSent(ReminderItem reminder)
+		private async Task OnReminderSentAsync(ReminderItem reminder)
 		{
 			_logger.LogInformation($"Mark reminder {reminder.Id:N} as sent");
 			reminder.MarkSent();
+			await _storage.UpdateAsync(reminder);
 			ReminderSent?.Invoke(this, new ReminderEventArgs(reminder));
 		}
 
-		private void OnReminderFailed(ReminderItem reminder)
+		private async Task OnReminderFailedAsync(ReminderItem reminder)
 		{
 			_logger.LogWarning($"Mark reminder {reminder.Id:N} as failed");
 			reminder.MarkFailed();
+			await _storage.UpdateAsync(reminder);
 			ReminderFailed?.Invoke(this, new ReminderEventArgs(reminder));
 		}
 	}

@@ -5,6 +5,7 @@ using System.Linq;
 namespace Reminder.Storage.Memory
 {
     using Exceptions;
+    using System.Threading.Tasks;
 
     public class ReminderStorage : IReminderStorage
     {
@@ -20,57 +21,53 @@ namespace Reminder.Storage.Memory
             _items = items.ToDictionary(item => item.Id);
         }
 
-        public void Add(ReminderItem item)
+        public Task AddAsync(ReminderItem item)
         {
-            if (_items.ContainsKey(item.Id))
+            if (!_items.TryAdd(item.Id, item))
             {
                 throw new ReminderItemAllreadyExistException(item.Id);
             }
-            _items.Add(item.Id, item);
+
+            return Task.CompletedTask;
         }
 
-        public void Update(ReminderItem item)
+        public Task UpdateAsync(ReminderItem item)
         {
-            if (!_items.ContainsKey(item.Id))
+            if (!_items.TryAdd(item.Id, item))
             {
                 throw new ReminderItemNotFoundException(item.Id);
             }
+
             _items[item.Id] = item;
+
+            return Task.CompletedTask;
         }
 
-        public ReminderItem Get(Guid id)
+        public Task<ReminderItem> GetAsync(Guid id)
         {
             if (!_items.TryGetValue(id, out var item))
             {
                 throw new ReminderItemNotFoundException(id);
             }
 
-            return item;
+            return Task.FromResult(item);
         }
 
-        //public ReminderItem[] Find(DateTimeOffset datetime, ReminderItemStatus status)
-        //{
-        //    return _items.Values
-        //        .Where(item => item.DateTime <= datetime && item.Status == status)
-        //        .OrderByDescending(item => item.DateTime)
-        //        .ToArray();
-        //}
-
-        public ReminderItem[] FindBy(ReminderItemFilter filter)
+        public Task<ReminderItem[]> FindByAsync(ReminderItemFilter filter)
         {
-            var line = _items.Values.AsEnumerable();
-
-            if (filter.DateTime.HasValue)
-            {
-                line = line.Where(item => item.DateTime <= filter.DateTime.Value);
-            }
+            var line = _items.Select(pair => pair.Value);
 
             if (filter.Status.HasValue)
             {
                 line = line.Where(item => item.Status == filter.Status.Value);
             }
 
-            return line.ToArray();
+            if (filter.DateTime.HasValue)
+            {
+                line = line.Where(item => item.DateTime <= filter.DateTime.Value);
+            }
+
+            return Task.FromResult(line.OrderByDescending(item => item.DateTime).ToArray());
         }
     }
 }

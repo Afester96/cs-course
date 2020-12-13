@@ -8,7 +8,7 @@ namespace Reminder.WebApi.ViewModels
     {
 		public Guid? Id { get; set; }
 
-		public DateTimeOffset DateTime { get; set; }
+		public long DateTime { get; set; }
 
 		public ReminderItemStatus Status { get; set; }
 

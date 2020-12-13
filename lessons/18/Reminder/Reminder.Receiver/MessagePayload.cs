@@ -20,6 +20,7 @@ namespace Reminder.Receiver
 			};
 
 		public DateTimeOffset DateTime { get; }
+
 		public string Text { get; }
 
 		public MessagePayload(string text, DateTimeOffset dateTime)

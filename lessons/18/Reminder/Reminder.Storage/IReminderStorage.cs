@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using Reminder.Storage.Exceptions;
 
 namespace Reminder.Storage
@@ -10,13 +10,13 @@ namespace Reminder.Storage
 		/// Add new item in dictionary
 		/// </summary>
 		/// <param name="item"></param>
-		void Add(ReminderItem item);
+		Task AddAsync(ReminderItem item);
 
 		/// <summary>
 		/// Update item in dictionary
 		/// </summary>
 		/// <param name="item"></param>
-		void Update(ReminderItem item);
+		Task UpdateAsync(ReminderItem item);
 
 		/// <summary>
 		///   Returns item with matching by id
@@ -26,15 +26,13 @@ namespace Reminder.Storage
 		/// <returns>
 		///   The reminder <see cref="ReminderItem"/>
 		/// </returns>
-		ReminderItem Get(Guid id);
+		Task<ReminderItem> GetAsync(Guid id);
 
 		/// <summary>
 		/// Finding item by datetime
 		/// </summary>
 		/// <param name="datetime"></param>
 		/// <returns></returns>
-		//ReminderItem[] Find(DateTimeOffset datetime, ReminderItemStatus status = ReminderItemStatus.Created);
-		
-		ReminderItem[] FindBy(ReminderItemFilter filter);
+		Task<ReminderItem[]> FindByAsync(ReminderItemFilter filter);
 	}
 }

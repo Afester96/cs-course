@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Reminder.Storage;
-using Reminder.Storage.Exceptions;
 using Reminder.WebApi.ViewModels;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Reminder.WebApi.Controllers
 {
@@ -17,24 +17,32 @@ namespace Reminder.WebApi.Controllers
             _storage = storage;
         }
 
-        [HttpGet("id")]
-        public IActionResult Get(Guid id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            var item = _storage.Get(id);
-            return Ok(item);
+            var item = await _storage.GetAsync(id);
+
+            return Ok(
+                new GetReminderViewModel(item)
+            );
         }
 
         [HttpGet]
-        public IActionResult Find([FromQuery] FindReminderViewModel model)
+        public async Task<IActionResult> Find([FromQuery] FindReminderViewModel model)
         {
-            var items = _storage.FindBy(
-                new ReminderItemFilter(model?.DateTime, model?.Status)
+            model ??= FindReminderViewModel.Default;
+
+            var items = await _storage.FindByAsync(
+                new ReminderItemFilter(model.DateTimeConverted, model.Status)
             );
-            return Ok(items);
+
+            return Ok(
+                items.Select(item => new GetReminderViewModel(item)).ToArray()
+            );
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateReminderViewModel model)
+        public async Task<IActionResult> Create([FromBody] CreateReminderViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -44,31 +52,36 @@ namespace Reminder.WebApi.Controllers
             var item = new ReminderItem(
                 model.Id ?? Guid.NewGuid(),
                 model.Status,
-                model.DateTime,
+                DateTimeOffset.FromUnixTimeMilliseconds(model.DateTime),
                 model.Message,
-                model.ContactId);
+                model.ContactId
+            );
+            await _storage.AddAsync(item);
 
-            _storage.Add(item);
-            return CreatedAtAction("Get", new { id = item.Id }, item);
+            return CreatedAtAction("Get", new { id = item.Id }, new GetReminderViewModel(item));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody] UpdateReminderViewModel model)
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateReminderViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var item = _storage.Get(id);
+            var item = await _storage.GetAsync(id);
             var updatedItem = new ReminderItem(
                 item.Id,
                 model.Status,
                 item.DateTime,
                 model.Message,
-                item.ContactId);
-            _storage.Update(updatedItem);
-            return Ok(updatedItem);
+                item.ContactId
+            );
+            await _storage.UpdateAsync(updatedItem);
+
+            return Ok(
+                new GetReminderViewModel(updatedItem)
+            );
         }
     }
 }

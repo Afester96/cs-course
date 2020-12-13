@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.10" />
+    <PackageReference Include="System.Linq.Async" Version="4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Reminder.Storage\Reminder.Storage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\CreateProcedureAddReminderItem.sql" />
+    <EmbeddedResource Include="Scripts\CreateProcedureUpdateReminderItem.sql" />
+    <EmbeddedResource Include="Scripts\CreateTableReminderContact.sql" />
+    <EmbeddedResource Include="Scripts\CreateTableReminderItem.sql" />
+    <EmbeddedResource Include="Scripts\CreateTableReminderStatus.sql" />
+    <EmbeddedResource Include="Scripts\InsertReminderStatus.sql" />
+  </ItemGroup>
+
+</Project>

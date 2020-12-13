@@ -6,47 +6,56 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-
-
 namespace Reminder.WebApi
 {
+    using Microsoft.Extensions.Configuration;
     using Reminder.Storage;
     using Reminder.Storage.Exceptions;
-    using Reminder.Storage.Memory;
+    using Reminder.Storage.SqlServer;
 
     public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-            services.AddSingleton<IReminderStorage, ReminderStorage>();
-        }
+	{
+		private readonly IConfiguration _configuration;
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+		public Startup(IConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
 
-            app.Use(ReminderExceptionHandling);
-            app.UseRouting();
-            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
-        }
-        private static async Task ReminderExceptionHandling(HttpContext context, Func<Task> next)
-        {
-            try
-            {
-                await next();
-            }
-            catch (ReminderItemNotFoundException)
-            {
-                context.Response.StatusCode = 404;
-            }
-            catch (ReminderItemAllreadyExistException)
-            {
-                context.Response.StatusCode = 409;
-            }
-        }
-    }
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddControllers();
+			services.AddSingleton<IReminderStorage>(provider =>
+				new ReminderStorage(_configuration.GetConnectionString("Database"))
+			);
+		}
+
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+		{
+			if (environment.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
+
+			app.Use(ReminderExceptionHandling);
+			app.UseRouting();
+			app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+		}
+
+		private static async Task ReminderExceptionHandling(HttpContext context, Func<Task> next)
+		{
+			try
+			{
+				await next();
+			}
+			catch (ReminderItemNotFoundException)
+			{
+				context.Response.StatusCode = 404;
+			}
+			catch (ReminderItemAllreadyExistException)
+			{
+				context.Response.StatusCode = 409;
+			}
+		}
+	}
 }

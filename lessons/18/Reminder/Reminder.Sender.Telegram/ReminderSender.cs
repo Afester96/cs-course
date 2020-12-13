@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Reminder.Sender.Exceptions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -14,9 +15,10 @@ namespace Reminder.Sender.Telegram
 			_client = new TelegramBotClient(token);
 		}
 
-		public void Send(ReminderNotification item)
+		public async Task SendAsync(ReminderNotification item)
 		{
 			string text;
+
 			if (item.Message == "info")
 			{
 				text = @"Hello! If you want to use reminder, please write this:
@@ -24,6 +26,7 @@ namespace Reminder.Sender.Telegram
 <DateTimeUtc>
 Messages without datetime returns imideatly";
 			}
+
 			else
 			{
 				text = $"{item.Message} at {item.DateTime:R}";
@@ -32,10 +35,9 @@ Messages without datetime returns imideatly";
 
 			try
 			{
-				_client.SendTextMessageAsync(chatId, text)
-					.GetAwaiter()
-					.GetResult();
+				await _client.SendTextMessageAsync(chatId, text);
 			}
+
 			catch (HttpRequestException exception)
 			{
 				throw new ReminderSenderException(exception);
