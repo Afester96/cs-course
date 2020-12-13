@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Reminder.Sender;
 using Reminder.Sender.Exceptions;
 
@@ -12,12 +13,7 @@ namespace Reminder.Domain.Tests
 			_fail = fail;
 		}
 
-		public void Send(ReminderNotification item)
-		{
-			if (_fail)
-			{
-				throw new ReminderSenderException(null);
-			}
-		}
+		public Task SendAsync(ReminderNotification item) =>
+			_fail ? Task.FromException(new ReminderSenderException(null)) : Task.CompletedTask;
 	}
 }

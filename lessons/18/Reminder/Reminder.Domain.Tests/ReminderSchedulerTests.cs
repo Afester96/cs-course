@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
@@ -34,13 +35,13 @@ namespace Reminder.Domain.Tests
 			NullLogger<ReminderScheduler>.Instance;
 
 		[Test]
-		public void GivenReminderWithPastDateAndSuccessSender_ShouldRaiseSentEvent()
+		public async Task GivenReminderWithPastDateAndSuccessSender_ShouldRaiseSentEvent()
 		{
 			var raised = false;
-			using var scheduler = new ReminderScheduler(Logger, Storage, SuccessSender, Receiver);
+			var scheduler = new ReminderScheduler(Logger, Storage, SuccessSender, Receiver);
 			scheduler.ReminderSent += (sender, args) => raised = true;
 
-			scheduler.Start(DefaultSettings);
+			await scheduler.StartAsync(DefaultSettings);
 			Receiver.SendMessage(DateTimeOffset.UtcNow, "Message", "ContactId");
 			WaitTimers();
 
@@ -48,13 +49,13 @@ namespace Reminder.Domain.Tests
 		}
 
 		[Test]
-		public void GivenReminderWithPastDateAndFailedSender_ShouldRaiseFailedEvent()
+		public async Task GivenReminderWithPastDateAndFailedSender_ShouldRaiseFailedEvent()
 		{
 			var raised = false;
-			using var scheduler = new ReminderScheduler(Logger, Storage, FailedSender, Receiver);
+			var scheduler = new ReminderScheduler(Logger, Storage, FailedSender, Receiver);
 			scheduler.ReminderFailed += (sender, args) => raised = true;
 
-			scheduler.Start(DefaultSettings);
+			await scheduler.StartAsync(DefaultSettings);
 			Receiver.SendMessage(DateTimeOffset.UtcNow, "Message", "ContactId");
 			WaitTimers();
 
