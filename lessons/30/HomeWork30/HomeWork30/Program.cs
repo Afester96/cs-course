@@ -75,31 +75,8 @@ namespace Test
                     "JOIN [Customer] AS C " +
                     "ON O.CustomerId = C.Id ";
 
-                await using var reader = await command.ExecuteReaderAsync();
-
-                var products = new List<Order>();
-                var idIndex = reader.GetOrdinal("Id");
-                var customerIndex = reader.GetOrdinal("Name");
-                var orderDateIndex = reader.GetOrdinal("OrderDate");
-                var discountIndex = reader.GetOrdinal("Discount");
-
-                if (!reader.HasRows)
-                {
-                    return new List<Order>();
-                }
-
-                while (await reader.ReadAsync())
-                {
-                    var product = new Order(
-                    reader.GetInt32(idIndex),
-                    reader.GetString(customerIndex),
-                    reader.GetDateTimeOffset(orderDateIndex),
-                    reader.IsDBNull(discountIndex) ? 0 : reader.GetDouble(discountIndex)
-                    );
-                    products.Add(product);
-                }
-
-                return products;
+                var orderList = await ReadOrderAsync(command);
+                return orderList;
             }
 
             public async Task<Order> GetById(int id)
@@ -119,27 +96,8 @@ namespace Test
                     "WHERE O.Id = @id";
                 command.Parameters.AddWithValue("id", id);
 
-                await using var reader = await command.ExecuteReaderAsync();
-
-                if (!reader.HasRows)
-                {
-                    throw new ArgumentException($"Product with id {id} not found");
-                }
-
-                var idIndex = reader.GetOrdinal("Id");
-                var customerIndex = reader.GetOrdinal("Name");
-                var orderDateIndex = reader.GetOrdinal("OrderDate");
-                var discountIndex = reader.GetOrdinal("Discount");
-
-                await reader.ReadAsync();
-
-                var product = new Order(
-                    reader.GetInt32(idIndex),
-                    reader.GetString(customerIndex),
-                    reader.GetDateTimeOffset(orderDateIndex),
-                    reader.GetDouble(discountIndex)
-                );
-                return product;
+                var orderList = await ReadOrderAsync(command);
+                return orderList.ToArray()[0];
             }
 
             public async Task<int> Insert(InsertOrderCommand dto)
@@ -194,18 +152,46 @@ namespace Test
 
                 return (int)command.ExecuteScalar();
             }
+
+            private async Task<List<Order>> ReadOrderAsync(SqlCommand command)
+            {
+                await using var reader = await command.ExecuteReaderAsync();
+
+                var list = new List<Order>();
+
+                if (!reader.HasRows)
+                {
+                    return list;
+                }
+
+                var idIndex = reader.GetOrdinal("Id");
+                var customerIndex = reader.GetOrdinal("Name");
+                var orderDateIndex = reader.GetOrdinal("OrderDate");
+                var discountIndex = reader.GetOrdinal("Discount");
+
+                while (await reader.ReadAsync())
+                {
+                    var order = new Order(
+                        reader.GetInt32(idIndex),
+                        reader.GetString(customerIndex),
+                        reader.GetDateTimeOffset(orderDateIndex),
+                        reader.IsDBNull(discountIndex) ? 0 : reader.GetDouble(discountIndex)
+                        );
+                    list.Add(order);
+                }
+
+                return list;
+            }
+
             private async Task<SqlConnection> GetConnection()
             {
                 var connection = new SqlConnection(_connection);
                 await connection.OpenAsync();
                 return connection;
             }
-
-            Task<List<Order>> IOrderRepository.GetAll()
-            {
-                throw new NotImplementedException();
-            }
         }
+
+        
 
         private const string ConnectionString =
             "Server=tcp:shadow-art.database.windows.net,1433;" +
