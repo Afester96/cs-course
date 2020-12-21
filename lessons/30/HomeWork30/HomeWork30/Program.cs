@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using System.Linq;
 
 namespace Test
 {
@@ -41,7 +42,7 @@ namespace Test
 
             public override string ToString()
             {
-                return $"Product with id: {Id} {Customer} {OrderDate} {Discount}";
+                return $"Order with id: {Id} Customer: {Customer} Date: {OrderDate} Discount: {Discount}";
             }
         }
         public interface IOrderRepository
@@ -75,7 +76,7 @@ namespace Test
                     "JOIN [Customer] AS C " +
                     "ON O.CustomerId = C.Id ";
 
-                var orderList = await ReadOrderAsync(command);
+                var orderList = await ReadOrderAsync(command).ToListAsync();
                 return orderList;
             }
 
@@ -96,8 +97,7 @@ namespace Test
                     "WHERE O.Id = @id";
                 command.Parameters.AddWithValue("id", id);
 
-                var orderList = await ReadOrderAsync(command);
-                return orderList.ToArray()[0];
+                return await ReadOrderAsync(command).FirstOrDefaultAsync();
             }
 
             public async Task<int> Insert(InsertOrderCommand dto)
@@ -153,15 +153,13 @@ namespace Test
                 return (int)command.ExecuteScalar();
             }
 
-            private async Task<List<Order>> ReadOrderAsync(SqlCommand command)
+            private async IAsyncEnumerable<Order> ReadOrderAsync(SqlCommand command)
             {
                 await using var reader = await command.ExecuteReaderAsync();
 
-                var list = new List<Order>();
-
                 if (!reader.HasRows)
                 {
-                    return list;
+                    yield break; 
                 }
 
                 var idIndex = reader.GetOrdinal("Id");
@@ -177,10 +175,8 @@ namespace Test
                         reader.GetDateTimeOffset(orderDateIndex),
                         reader.IsDBNull(discountIndex) ? 0 : reader.GetDouble(discountIndex)
                         );
-                    list.Add(order);
+                    yield return order;
                 }
-
-                return list;
             }
 
             private async Task<SqlConnection> GetConnection()
