@@ -73,7 +73,7 @@ namespace HomeWork34
 
         private void OnEntityModelCreating(EntityTypeBuilder<Document> documents)
         {
-            documents.ToTable("Positions");
+            documents.ToTable("DocPositions");
             documents.Property(document => document.Id);
             documents.Property(document => document.Name)
                 .IsRequired()
@@ -95,27 +95,27 @@ namespace HomeWork34
                 .HasOne(documentStatus => documentStatus.Document)
                 .WithMany(document => document.DocumentStatuses)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
             documentStatuses
                 .HasOne(documentStatus => documentStatus.SenderEmployee)
-                .WithMany(senderEmployee => senderEmployee.DocumentStatuses)
+                .WithMany(senderEmployee => senderEmployee.SenderDocumentStatuses)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
             documentStatuses
                 .HasOne(documentStatus => documentStatus.SenderAddress)
-                .WithMany(senderAddress => senderAddress.DocumentStatuses)
+                .WithMany(senderAddress => senderAddress.SenderDocumentStatuses)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
             documentStatuses
                 .HasOne(documentStatus => documentStatus.ReceiverEmployee)
-                .WithMany(receiverEmployee => receiverEmployee.DocumentStatuses)
+                .WithMany(receiverEmployee => receiverEmployee.ReceiverDocumentStatuses)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
             documentStatuses
                 .HasOne(documentStatus => documentStatus.ReceiverAddress)
-                .WithMany(receiverAddress => receiverAddress.DocumentStatuses)
+                .WithMany(receiverAddress => receiverAddress.ReceiverDocumentStatuses)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
             documentStatuses
                 .HasOne(documentStatus => documentStatus.Status)
                 .WithMany(status => status.DocumentStatuses)

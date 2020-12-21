@@ -10,11 +10,13 @@ namespace HomeWork34
         public City City { get; private set; }
         public string Street { get; private set; }
         public string House { get; private set; }
-        public ICollection<DocumentStatus> DocumentStatuses { get; private set; }
+        public ICollection<DocumentStatus> SenderDocumentStatuses { get; private set; }
+        public ICollection<DocumentStatus> ReceiverDocumentStatuses { get; private set; }
 
         public Address()
         {
-            DocumentStatuses = new HashSet<DocumentStatus>();
+            SenderDocumentStatuses = new HashSet<DocumentStatus>();
+            ReceiverDocumentStatuses = new HashSet<DocumentStatus>();
         }
 
         public Address(City city, string street, string house)

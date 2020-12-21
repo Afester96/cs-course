@@ -9,7 +9,6 @@ namespace HomeWork34
         static async Task Main(string[] args)
         {
             await EnsureDatabaseCreated();
-            await EnsureDatabaseCreated();
             await InsertCity();
             await InsertAddress();
             await InsertDocument();
