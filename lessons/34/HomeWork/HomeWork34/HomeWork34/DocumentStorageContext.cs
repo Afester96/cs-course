@@ -75,8 +75,7 @@ namespace HomeWork34
         {
             documents.ToTable("DocPositions");
             documents.Property(document => document.Id);
-            documents.Property(document => document.Name)
-                .IsRequired()
+            documents.Property(document => document.FirstName)
                 .IsUnicode()
                 .HasMaxLength(512);
             documents.Property(document => document.SecondName)
@@ -87,8 +86,7 @@ namespace HomeWork34
                 .IsRequired()
                 .HasMaxLength(512); ;
             documents.HasKey(document => document.Id);
-            documents.HasIndex(document => document.Name).IsUnique();
-
+            documents.HasIndex(document => document.FirstName).IsUnique();
         }
 
         private void OnEntityModelCreating(EntityTypeBuilder<DocumentStatus> documentStatuses)

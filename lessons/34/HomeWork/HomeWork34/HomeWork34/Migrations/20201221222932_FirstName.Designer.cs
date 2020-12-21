@@ -4,14 +4,16 @@ using HomeWork34;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HomeWork34.Migrations
 {
     [DbContext(typeof(DocumentStorageContext))]
-    partial class DocumentStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20201221222932_FirstName")]
+    partial class FirstName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,6 +81,12 @@ namespace HomeWork34.Migrations
                         .HasMaxLength(512)
                         .IsUnicode(true);
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512)
+                        .IsUnicode(true);
+
                     b.Property<int>("Pages")
                         .HasColumnType("int")
                         .HasMaxLength(512);
@@ -91,9 +99,8 @@ namespace HomeWork34.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FirstName")
-                        .IsUnique()
-                        .HasFilter("[FirstName] IS NOT NULL");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("DocPositions");
                 });

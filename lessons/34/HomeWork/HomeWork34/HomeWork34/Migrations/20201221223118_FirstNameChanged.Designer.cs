@@ -4,14 +4,16 @@ using HomeWork34;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HomeWork34.Migrations
 {
     [DbContext(typeof(DocumentStorageContext))]
-    partial class DocumentStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20201221223118_FirstNameChanged")]
+    partial class FirstNameChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
