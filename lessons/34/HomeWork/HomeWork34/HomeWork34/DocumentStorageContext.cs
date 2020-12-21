@@ -79,6 +79,10 @@ namespace HomeWork34
                 .IsRequired()
                 .IsUnicode()
                 .HasMaxLength(512);
+            documents.Property(document => document.SecondName)
+               .IsRequired()
+               .IsUnicode()
+               .HasMaxLength(512);
             documents.Property(document => document.Pages)
                 .IsRequired()
                 .HasMaxLength(512); ;

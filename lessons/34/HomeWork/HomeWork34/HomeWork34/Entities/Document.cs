@@ -8,6 +8,7 @@ namespace HomeWork34
     {
         public int Id { get; private set; }
         public string Name { get; private set; }
+        public string SecondName { get; private set; }
         public int Pages { get; private set; }
         public ICollection<DocumentStatus> DocumentStatuses { get; private set; }
 
