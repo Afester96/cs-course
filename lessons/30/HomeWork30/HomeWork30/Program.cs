@@ -76,8 +76,7 @@ namespace Test
                     "JOIN [Customer] AS C " +
                     "ON O.CustomerId = C.Id ";
 
-                var orderList = await ReadOrderAsync(command).ToListAsync();
-                return orderList;
+                return await ReadOrderAsync(command).ToListAsync();
             }
 
             public async Task<Order> GetById(int id)
